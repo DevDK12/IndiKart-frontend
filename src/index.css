@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Palanquin:wght@100;200;300;400;500;600;700&display=swap");
+
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer base {
+
+    :root {
+
+        --color-accent-light: 230 80 126;
+        --color-accent-main: 224 36 94;
+        --color-accent-dark: 179 29 75;
+        --color-accent-text: 255 255 255;
+
+    }
+
+
+    :root[data-theme="light"] {
+        --color-primary-light: 153 153 153;
+        --color-primary-main: 204 204 204;
+        --color-primary-dark: 255 255 255;
+        --color-primary-text: 22 22 22;
+
+        --color-secondary-light: 80 80 80;
+        --color-secondary-main: 36 36 36;
+        --color-secondary-dark: 22 22 22;
+        --color-secondary-text: 255 255 255;
+    }
+
+    :root[data-theme="dark"] {
+        --color-primary-light: 80 80 80;
+        --color-primary-main: 36 36 36;
+        --color-primary-dark: 22 22 22;
+        --color-primary-text: 255 255 255;
+
+        --color-secondary-light: 255 255 255;
+        --color-secondary-main: 204 204 204;
+        --color-secondary-dark: 153 153 153;
+        --color-secondary-text: 22 22 22;
+    }
+
+
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+
+    body {
+        min-width: 320px;
+        min-height: 100vh;
+    }
+
+
+}
