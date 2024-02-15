@@ -17,6 +17,17 @@
         --color-accent-dark: 179 29 75;
         --color-accent-text: 255 255 255;
 
+
+        --color-primary-light: 80 80 80;
+        --color-primary-main: 36 36 36;
+        --color-primary-dark: 22 22 22;
+        --color-primary-text: 255 255 255;
+
+        --color-secondary-light: 255 255 255;
+        --color-secondary-main: 204 204 204;
+        --color-secondary-dark: 153 153 153;
+        --color-secondary-text: 22 22 22;
+
     }
 
 
@@ -63,6 +74,18 @@
     body {
         min-width: 320px;
         min-height: 100vh;
+    }
+
+
+    li{
+        list-style: none;
+    }
+
+
+    h5 {
+        letter-spacing: 1px;
+        font-weight: 300;
+        text-transform: uppercase;
     }
 
 
