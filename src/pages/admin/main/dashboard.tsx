@@ -1,12 +1,12 @@
-import AdminHeader from "../../components/admin/AdminHeader"
-import WidgetItem from "../../components/admin/WidgetItem"
+import AdminHeader from "../../../components/admin/AdminHeader"
+import WidgetItem from "../../../components/admin/WidgetItem"
 
-import data from '../../assets/data.json'
-import CategoryItem from "../../components/admin/CategoryItem"
-import BarChart from "../../components/ui/Charts/BarChart"
+import data from '../../../assets/data.json'
+import CategoryItem from "../../../components/admin/CategoryItem"
+import BarChart from "../../../components/ui/Charts/BarChart"
 import { BiMaleFemale } from "react-icons/bi"
-import DoughnutChart from "../../components/ui/Charts/DoughnutChart"
-import DashboardTable from "../../components/admin/DashboardTable"
+import DoughnutChart from "../../../components/ui/Charts/DoughnutChart"
+import DashboardTable from "../../../components/admin/DashboardTable"
 
 
 

@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { Column } from "react-table";
-import TableHOC from "../../components/ui/TableHOC";
+import TableHOC from "../../../../components/ui/TableHOC";
 
 interface DataType {
     avatar: ReactElement;

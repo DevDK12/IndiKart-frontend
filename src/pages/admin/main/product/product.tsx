@@ -2,7 +2,7 @@ import { ReactElement, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
-import TableHOC from "../../components/ui/TableHOC";
+import TableHOC from "../../../../components/ui/TableHOC";
 
 
 
