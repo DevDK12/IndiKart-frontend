@@ -18,9 +18,9 @@ const Customer = lazy(() => import('./pages/admin/main/customer/customer'));
 const Product = lazy(() => import('./pages/admin/main/product/product'));
 const Transaction = lazy(() => import('./pages/admin/main/transaction/transaction'));
 
-const Bar = lazy(() => import('./pages/admin/Chart/bar'));
-const Pie = lazy(() => import('./pages/admin/Chart/pie'));
-const Line = lazy(() => import('./pages/admin/Chart/line'));
+const Bar = lazy(() => import('./pages/admin/Chart/barCharts'));
+const Pie = lazy(() => import('./pages/admin/Chart/pieCharts'));
+const Line = lazy(() => import('./pages/admin/Chart/lineCharts'));
 
 const Stopwatch = lazy(() => import('./pages/admin/Apps/stopwatch'));
 const Coupon = lazy(() => import('./pages/admin/Apps/coupon'));
