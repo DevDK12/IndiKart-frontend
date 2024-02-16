@@ -100,4 +100,22 @@
         @apply subtitle text-base xs:text-xl sm:text-2xl text-center
     }
 
+    .tosscoin {
+        transform-style: preserve-3d;
+    }
+
+
+    .coin-head {
+        backface-visibility: hidden;
+        filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.521));
+        background-image: url("../src/assets/images/heads.png");
+    }
+
+    .coin-tail {
+        backface-visibility: hidden;
+        filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.521));
+        background-image: url("../src/assets/images/tails.png");
+        transform: rotateY(-180deg);
+    }
+
 }
