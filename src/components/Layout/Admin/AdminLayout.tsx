@@ -16,7 +16,7 @@ const AdminLayout = () => {
         <div className='flex h-screen bg-primary-200 text-primary-txt'>
             <AdminSidebar />
 
-            <main className="w-full">
+            <main className="w-full overflow-y-auto hide-scrollbar">
                 <Suspense fallback={<Loader />}>
                     <Outlet />
                 </Suspense>

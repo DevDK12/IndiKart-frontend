@@ -109,7 +109,7 @@ const AdminSidebar = () => {
 
 
 
-    const width = isExpanded ? 'min-w-[200px] w-9/12 xs:w-2/3 sm:w-1/2 md:w-2/5 lg:w-1/5 px-4' : 'px-3';
+    const width = isExpanded ? 'min-w-[200px] w-9/12 xs:w-2/3 sm:w-1/2 md:w-2/5 lg:w-1/5 px-4' : 'min-w-[75px] px-3';
 
     return (
         <aside className={`relative bg-primary-300 text-primary-txt  h-screen overflow-x-hidden overflow-y-auto hide-scrollbar flex flex-col gap-12 py-2 
@@ -128,11 +128,11 @@ const AdminSidebar = () => {
                 }
             </button>
             <div className="flex items-center h-16 gap-4 px-2 py-2 mt-5">
-                <div className="w-10 h-10 rounded-md cursor-pointer bg-secondary-200"></div>
+                <div className="w-10 h-10 rounded-md cursor-pointer bg-secondary-200 flex-none"></div>
                 {isExpanded &&
                     <div>
-                        <h2>MERN</h2>
-                        <h2>Ecommerce </h2>
+                        <h4 className="subtitle">MERN</h4>
+                        <h4 className="subtitle">Ecommerce </h4>
                     </div>
                 }
             </div>
