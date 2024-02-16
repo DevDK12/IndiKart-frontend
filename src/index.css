@@ -96,6 +96,8 @@
         @apply rounded-md py-4 px-4
     }
 
-
+    .title {
+        @apply subtitle text-base xs:text-xl sm:text-2xl text-center
+    }
 
 }

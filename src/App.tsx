@@ -27,6 +27,10 @@ const Coupon = lazy(() => import('./pages/admin/Apps/coupon'));
 const Toss = lazy(() => import('./pages/admin/Apps/toss'));
 
 
+const NewProduct = lazy(() => import('./pages/admin/main/product/newProduct'));
+const ManageProduct = lazy(() => import('./pages/admin/main/product/manageProduct'));
+const ManageTransaction = lazy(() => import('./pages/admin/main/transaction/manageTransaction'));
+
 
 
 
@@ -60,6 +64,11 @@ const App = () => {
         <Route path="/admin/app/coupon" element={<Coupon />} />
         <Route path="/admin/app/toss" element={<Toss />} />
 
+        {/* Management */}
+        <Route path="/admin/product/new" element={<NewProduct />} />
+        <Route path="/admin/product/:id" element={<ManageProduct />} />
+        <Route path="/admin/transaction/:id" element={<ManageTransaction />} />
+        
       </Route>
 
     </Routes>
