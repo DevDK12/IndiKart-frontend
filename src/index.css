@@ -89,7 +89,7 @@
     }
 
     .main-section {
-        @apply px-8 py-4
+        @apply px-8 py-4 rounded-md
     }
 
     .main-container {

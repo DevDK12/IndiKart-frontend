@@ -1,5 +1,4 @@
-import { Cell, Row } from "react-table";
-
+import { AiOutlineSortAscending, AiOutlineSortDescending } from "react-icons/ai";
 import {
     Column,
     usePagination,
@@ -20,6 +19,8 @@ function TableHOC<T extends object>(
     data: T[],
     containerClassname: string,
     heading: string,
+    showPagination: boolean = false,
+    itemsPerPage?: number
 ) {
 
 
@@ -28,6 +29,9 @@ function TableHOC<T extends object>(
         const options: TableOptions<T> = {
             columns,
             data,
+            initialState: {
+                pageSize: itemsPerPage || 5,
+            }
         };
 
         const {
@@ -36,6 +40,12 @@ function TableHOC<T extends object>(
             headerGroups,
             page,
             prepareRow,
+            nextPage,
+            pageCount,
+            state: { pageIndex },
+            previousPage,
+            canNextPage,
+            canPreviousPage,
         } = useTable(options, useSortBy, usePagination);
 
 
@@ -54,9 +64,21 @@ function TableHOC<T extends object>(
                                 {headerGroup.headers.map((column) => (
                                     <th
                                         className="text-primary-txt font-semibold text-lg py-4 px-2 xs:py-5 xs:px-3 sm:py-6 sm:px-4 lg:py-8 lg:px-6"
-                                        {...column.getHeaderProps()}
+                                        {...column.getHeaderProps(column.getSortByToggleProps())}
                                     >
-                                        {column.render("Header")}
+                                        <div className="relative ">
+
+                                            {column.render("Header")}
+                                            {column.isSorted && (
+                                                <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 translate-x-1/2">
+                                                    {column.isSortedDesc ? (
+                                                        <AiOutlineSortDescending />
+                                                    ) : (
+                                                        <AiOutlineSortAscending />
+                                                    )}
+                                                </span>
+                                            )}
+                                        </div>
 
                                     </th>
                                 ))}
@@ -64,13 +86,13 @@ function TableHOC<T extends object>(
                         ))}
                     </thead>
                     <tbody {...getTableBodyProps()}>
-                        {page.map((row: Row<T>) => {
+                        {page.map((row) => {
 
                             prepareRow(row);
 
                             return (
                                 <tr className="shadow-lg" {...row.getRowProps()}>
-                                    {row.cells.map((cell: Cell<T>) => (
+                                    {row.cells.map((cell) => (
                                         <td className="p-2 xs:p-3 sm:p-4" {...cell.getCellProps()}>
                                             {cell.render("Cell")}
                                         </td>
@@ -80,6 +102,17 @@ function TableHOC<T extends object>(
                         })}
                     </tbody>
                 </table>
+                {showPagination && (
+                    <div className="mt-6 flex justify-center items-center font-semibold gap-4">
+                        <button className="bg-cyan-400 px-4 py-1 rounded-lg disabled:bg-cyan-100 disabled:text-cyan-300 disabled:cursor-not-allowed" disabled={!canPreviousPage} onClick={previousPage}>
+                            Prev
+                        </button>
+                        <span>{`${pageIndex + 1} of ${pageCount}`}</span>
+                        <button className="bg-cyan-400 px-4 py-1 rounded-lg disabled:bg-cyan-100 disabled:text-cyan-300 disabled:cursor-not-allowed" disabled={!canNextPage} onClick={nextPage}>
+                            Next
+                        </button>
+                    </div>
+                )}
             </div>
         );
     };
