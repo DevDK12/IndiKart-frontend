@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { OrderItemType } from "../../../../types";
+import { OrderItemType } from "../../../../Types/types";
 import ProductCard from "../../../../components/admin/ProductCart";
 
 
