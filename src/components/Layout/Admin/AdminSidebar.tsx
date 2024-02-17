@@ -11,7 +11,7 @@ import { admin_items, apps, charts } from "../../../utils/Admin_Menu";
 
 
 
-
+const url = "https://cdn.pixabay.com/photo/2014/04/02/10/16/fire-303309_640.png";
 
 
 
@@ -29,7 +29,7 @@ const AdminSidebar = ({ showSidebar, onHideSidebar, isMobileNav }: AdminSidebarP
 
     return (
         <aside
-            className={`bg-primary-300 text-primary-txt  h-screen overflow-x-hidden overflow-y-auto hide-scrollbar animate-sidebar flex flex-col gap-12 py-2 text-sm 
+            className={`bg-primary-300 text-primary-txt  h-screen overflow-x-hidden overflow-y-auto hide-scrollbar animate-sidebar flex flex-col gap-12 py-2 pb-10 text-sm 
                 ${isExpanded ? 'min-w-[200px] px-4' : 'min-w-[75px] px-3'} 
                 ${isMobileNav ? showSidebar ? 'left-0' : '-left-full' : ''}  
                 ${isMobileNav ? 'fixed z-20' : 'relative'}`
@@ -56,7 +56,7 @@ const AdminSidebar = ({ showSidebar, onHideSidebar, isMobileNav }: AdminSidebarP
             }
             <div className="flex items-center h-16 gap-4 px-2 py-2 mt-5">
                 <Link className="w-10 h-10 rounded-md cursor-pointer flex-none" to={'/admin/dashboard'}>
-                    <img className="rounded-md" src="https://cdn.pixabay.com/photo/2012/04/18/00/26/fire-36269_640.png" />
+                    <img className="rounded-md" src={url} />
                 </Link>
 
                 <div className={`${!isExpanded && 'hidden'}`}>

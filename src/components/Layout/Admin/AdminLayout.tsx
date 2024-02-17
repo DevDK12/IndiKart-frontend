@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import Loader from "../../ui/Loader";
 import AdminSidebar from "./AdminSidebar";
 import { HiMenuAlt4 } from "react-icons/hi";
+import AdminHeader from "../../admin/AdminHeader";
 
 
 
@@ -45,6 +46,8 @@ const AdminLayout = () => {
             />
 
             <main className="w-full overflow-y-auto hide-scrollbar">
+                <AdminHeader />
+
                 <Suspense fallback={<Loader />}>
                     <Outlet />
                 </Suspense>

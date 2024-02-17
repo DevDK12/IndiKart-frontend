@@ -1,7 +1,7 @@
+import { SidebarItemType } from "../../../Types/MenuItemTypes"
 import SidebarItem from "./SidebarItem"
 
 
-import { SidebarItemType } from "./AdminSidebar"
 
 
 interface SidebarListProps {

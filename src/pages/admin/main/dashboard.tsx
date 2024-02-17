@@ -16,7 +16,6 @@ import DashboardTable from "../../../components/admin/DashboardTable"
 const Dashboard = () => {
     return (
         <>
-            <AdminHeader />
 
             {/* Widget section */}
             <section
