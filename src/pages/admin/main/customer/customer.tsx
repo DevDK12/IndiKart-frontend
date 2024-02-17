@@ -81,7 +81,7 @@ const Customers = () => {
     const Table = TableHOC<DataType>(
         columns,
         rows,
-        "main-container overflow-y-auto bg-primary-100",
+        "main-container overflow-auto hide-scrollbar bg-primary-100",
         "Customers",
         rows.length > 5,
         5

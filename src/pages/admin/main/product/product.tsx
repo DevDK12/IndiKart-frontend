@@ -78,7 +78,7 @@ const Products = () => {
     const Table = TableHOC<DataType>(
         columns,
         rows,
-        "main-container overflow-y-auto bg-primary-100",
+        "main-container overflow-auto hide-scrollbar bg-primary-100",
         "Products",
         rows.length > 5,
         5
@@ -90,7 +90,7 @@ const Products = () => {
             {Table()}
             <Link
                 to="/admin/product/new"
-                className="create-product-btn bg-red-600 fixed top-2 right-4 w-10 h-10 flex justify-center items-center rounded-full hover:opacity-85"
+                className="create-product-btn bg-red-600 fixed top-14 right-6 w-10 h-10 flex justify-center items-center rounded-full hover:opacity-85"
             >
                 <FaPlus />
             </Link>

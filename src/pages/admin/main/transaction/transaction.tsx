@@ -87,7 +87,7 @@ const Transaction = () => {
     const Table = TableHOC<DataType>(
         columns,
         rows,
-        "main-container overflow-y-auto bg-primary-100",
+        "main-container overflow-auto hide-scrollbar bg-primary-100",
         "Transactions",
         rows.length > 8,
         8
