@@ -3,8 +3,7 @@
 import { RiCoupon3Fill, RiDashboardFill, RiShoppingBag3Fill } from "react-icons/ri";
 import { IoIosPeople } from "react-icons/io";
 import { AiFillFileText } from "react-icons/ai";
-import { FaChartBar, FaChartLine, FaChartPie, FaChevronCircleLeft, FaChevronCircleRight, FaGamepad, FaStopwatch } from "react-icons/fa";
-import { useState } from "react";
+import { FaChartBar, FaChartLine, FaChartPie, FaChevronCircleLeft, FaGamepad, FaStopwatch } from "react-icons/fa";
 import SidebarList from "./SidebarList";
 import { IconType } from "react-icons";
 import { Link } from "react-router-dom";
@@ -99,61 +98,50 @@ const apps: SidebarItemType[] = [
 
 
 
+interface MobileAdminSidebarProps {
+    showNav: boolean;
+    onHideNav: (show: boolean) => void;
+}
+
+
+const MobileAdminSidebar = ({ showNav, onHideNav }: MobileAdminSidebarProps) => {
 
 
 
-const AdminSidebar = () => {
-
-    const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
-
-
-
-    const width = isExpanded ? 'min-w-[200px] w-9/12 xs:w-2/3 sm:w-1/2 md:w-2/5 lg:w-1/5 px-4' : 'min-w-[75px] px-3';
 
     return (
-        <aside className={`relative bg-primary-300 text-primary-txt  h-screen overflow-x-hidden overflow-y-auto hide-scrollbar flex flex-col gap-12 py-2 
-        ${width} text-sm`}
+        <aside className={`fixed z-20 bg-primary-300 text-primary-txt  h-screen overflow-x-hidden overflow-y-auto hide-scrollbar flex flex-col gap-12 py-2 
+        min-w-[200px] w-9/12 xs:w-2/3 sm:w-1/2 md:w-2/5 lg:w-1/5 px-4 text-sm ${showNav ? 'left-0' : '-left-full'} transition-all duration-300`}
         >
 
             <button
-                className="absolute w-6 h-6 top-10 -right-4"
-                onClick={() => setIsExpanded(!isExpanded)}
+                className="absolute w-6 h-6 top-10 right-4"
+                onClick={() => onHideNav(false)}
             >
-                {isExpanded ?
-                    <FaChevronCircleLeft className="w-6 h-6" />
-                    :
-                    <FaChevronCircleRight className="w-6 h-6" />
-
-                }
+                <FaChevronCircleLeft className="w-6 h-6" />
             </button>
             <div className="flex items-center h-16 gap-4 px-2 py-2 mt-5">
                 <Link className="w-10 h-10 rounded-md cursor-pointer flex-none" to={'/admin/dashboard'}>
                     <img className="rounded-md" src="https://cdn.pixabay.com/photo/2012/04/18/00/26/fire-36269_640.png" />
                 </Link>
-                {isExpanded &&
-                    <div>
-                        <h4 className="subtitle">MERN</h4>
-                        <h4 className="subtitle">Ecommerce </h4>
-                    </div>
-                }
+                <div>
+                    <h4 className="subtitle">MERN</h4>
+                    <h4 className="subtitle">Ecommerce </h4>
+                </div>
             </div>
 
             <SidebarList
                 items={admin_items}
-                isExpanded={isExpanded}
                 title='Admin'
             />
 
             <SidebarList
                 items={charts}
-                isExpanded={isExpanded}
                 title='Chart'
             />
 
             <SidebarList
                 items={apps}
-                isExpanded={isExpanded}
                 title='Apps'
             />
 
@@ -163,4 +151,4 @@ const AdminSidebar = () => {
 
 
 
-export default AdminSidebar
+export default MobileAdminSidebar

@@ -6,13 +6,13 @@ import { SidebarItemType } from "./AdminSidebar"
 
 interface SidebarListProps {
     items: SidebarItemType[],
-    isExpanded: boolean,
+    isExpanded?: boolean,
     title: string
 }
 
 
 
-const SidebarList = ({ items, isExpanded, title }: SidebarListProps) => {
+const SidebarList = ({ items, isExpanded=true, title }: SidebarListProps) => {
     return (
         <section>
             <ul className="flex flex-col gap-4">

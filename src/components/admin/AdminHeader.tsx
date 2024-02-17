@@ -18,7 +18,7 @@ const AdminHeader = () => {
     return (
         <header className="bg-primary-100 text-primary-txt flex items-center justify-between gap-5  px-4 py-3">
             <input
-                className="rounded-lg bg-primary-200 px-2 py-1 w-1/2"
+                className="rounded-lg bg-primary-200 ml-14 px-2 py-1 w-1/2"
             />
             <div className="flex items-center gap-7">
                 <CiBrightnessDown className="w-6 h-6" />
