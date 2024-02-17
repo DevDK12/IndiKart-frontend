@@ -118,4 +118,8 @@
         transform: rotateY(-180deg);
     }
 
+    .animate-sidebar {
+        @apply transition-all duration-500
+    }
+
 }

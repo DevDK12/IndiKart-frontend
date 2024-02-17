@@ -25,9 +25,7 @@ const SidebarItem = ({ path, label, Icon, isExpanded }: SidebarItemProps) => {
                 <div>
                     {<Icon className="w-5 h-5" />}
                 </div>
-                {isExpanded &&
-                    <p>{label}</p>
-                }
+                <p className={`animate-sidebar ${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{label}</p>
             </NavLink>
         </li>
     )

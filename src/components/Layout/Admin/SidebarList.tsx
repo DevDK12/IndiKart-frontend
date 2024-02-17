@@ -12,11 +12,11 @@ interface SidebarListProps {
 
 
 
-const SidebarList = ({ items, isExpanded=true, title }: SidebarListProps) => {
+const SidebarList = ({ items, isExpanded = true, title }: SidebarListProps) => {
     return (
         <section>
             <ul className="flex flex-col gap-4">
-                <h5 className={` ${isExpanded ? 'text-primary-txt' : 'opacity-0'}`}>{title}</h5>
+                <h5 className={`animate-sidebar text-primary-txt ${isExpanded ? '' : 'invisible'}`}>{title}</h5>
                 {items.map((item) => (
                     <SidebarItem
                         key={item.id}

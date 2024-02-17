@@ -69,6 +69,19 @@ export default {
         //   '2xl': '6rem',
         // },
       },
+      keyframes: {
+        expand: {
+          '0%': { width: '0' },
+          '100%': { width: '100%' },
+        },
+      },
+      animation: {
+        expand: 'expand 2s ease-in-out infinite',
+      },
+      
+
+      
+
     },
   },
   plugins: [
