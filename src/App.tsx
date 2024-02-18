@@ -8,9 +8,9 @@ import AdminLayout from './components/Layout/Admin/AdminLayout';
 
 
 
-const Home = lazy(() => import('./pages/home'));
-const Search = lazy(() => import('./pages/search'));
-const Cart = lazy(() => import('./pages/cart'));
+const Home = lazy(() => import('./pages/shop/home'));
+const Search = lazy(() => import('./pages/shop/search'));
+const Cart = lazy(() => import('./pages/shop/cart'));
 
 
 const Dashboard = lazy(() => import('./pages/admin/main/dashboard'));
