@@ -123,4 +123,10 @@
         @apply transition-all duration-500
     }
 
+
+    .cover-image {
+        background: url("../src/assets/images/cover.jpg") no-repeat center / cover;
+    }
+    
+
 }

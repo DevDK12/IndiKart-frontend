@@ -16,7 +16,7 @@ const AdminHeader = () => {
     }
 
     return (
-        <header className="bg-primary-100 text-primary-txt flex items-center justify-between gap-5  px-4 py-3">
+        <header className="bg-primary-100 max-h-[2rem] text-primary-txt flex items-center justify-between gap-5  px-4 py-3">
             <input
                 className="rounded-lg bg-primary-200 ml-14 px-2 py-1 w-1/2"
             />
