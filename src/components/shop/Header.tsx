@@ -7,14 +7,10 @@ import {
     FaSignOutAlt,
 } from "react-icons/fa";
 import { useState } from "react";
-import { signOut } from "firebase/auth";
-import toast from "react-hot-toast";
 import Avatar from "../ui/Avatar";
 
 
 
-interface PropsType {
-}
 
 
 const user = {
