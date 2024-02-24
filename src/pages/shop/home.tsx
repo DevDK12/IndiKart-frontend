@@ -1,103 +1,7 @@
 import { Link } from "react-router-dom";
-import { faker } from '@faker-js/faker'
 
-import ProductCard from "../../components/shop/ProductCard";
-
-
-
-
-type ProductType = {
-    _id: string,
-    name: string,
-    price: number,
-    stock: number,
-    photo: string
-
-}
-
-
-
-
-type DataType = {
-    products: ProductType[]
-}
-
-
-
-const data: DataType = {
-    products: [
-        {
-            _id: "1",
-            name: "Product 1",
-            price: 100,
-            stock: 10,
-            photo: faker.image.url()
-        },
-        {
-            _id: "2",
-            name: "Product 2",
-            price: 200,
-            stock: 20,
-            photo: faker.image.url()
-        },
-        {
-            _id: "3",
-            name: "Product 3",
-            price: 300,
-            stock: 30,
-            photo: faker.image.url()
-        },
-        {
-            _id: "4",
-            name: "Product 4",
-            price: 400,
-            stock: 40,
-            photo: faker.image.url()
-        },
-        {
-            _id: "5",
-            name: "Product 5",
-            price: 500,
-            stock: 50,
-            photo: faker.image.url()
-        },
-        {
-            _id: "6",
-            name: "Product 6",
-            price: 600,
-            stock: 60,
-            photo: faker.image.url()
-        },
-        {
-            _id: "7",
-            name: "Product 7",
-            price: 700,
-            stock: 70,
-            photo: faker.image.url()
-        },
-        {
-            _id: "8",
-            name: "Product 8",
-            price: 800,
-            stock: 80,
-            photo: faker.image.url()
-        },
-        {
-            _id: "9",
-            name: "Product 9",
-            price: 900,
-            stock: 90,
-            photo: faker.image.url()
-        },
-        {
-            _id: "10",
-            name: "Product 10",
-            price: 1000,
-            stock: 100,
-            photo: faker.image.url()
-        }
-    ]
-}
+import Products from "../../components/shop/Products";
+import {data} from '../../utils/Shop_products';
 
 
 
@@ -105,10 +9,6 @@ const data: DataType = {
 
 const Home = () => {
 
-
-
-    const addToCartHandler = () => {
-    };
 
 
     return (
@@ -127,21 +27,9 @@ const Home = () => {
                     </Link>
                 </div>
 
-                <main className="grid place-items-center grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-                    {
-                        data?.products.map((i) => (
-                            <ProductCard
-                                key={i._id}
-                                productId={i._id}
-                                name={i.name}
-                                price={i.price}
-                                stock={i.stock}
-                                handler={addToCartHandler}
-                                photo={i.photo}
-                            />
-                        ))
-                    }
-                </main>
+                <Products 
+                    products={data.products}
+                />
             </section>
         </div>
     );
