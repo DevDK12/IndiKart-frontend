@@ -128,5 +128,11 @@
         background: url("../src/assets/images/cover.jpg") no-repeat center / cover;
     }
     
+    
+    .login-cover {
+        background: url("../src/assets/images/login_cover.jpg") no-repeat center / cover;
+
+    }
+    
 
 }

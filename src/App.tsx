@@ -33,12 +33,24 @@ const ManageProduct = lazy(() => import('./pages/admin/main/product/manageProduc
 const ManageTransaction = lazy(() => import('./pages/admin/main/transaction/manageTransaction'));
 
 
+const Login = lazy(() => import('./pages/auth/login'));
+const Signup = lazy(() => import('./pages/auth/signup'));
+
+
+
 
 
 
 const App = () => {
   return (
     <Routes>
+
+    
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+
+
+
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
