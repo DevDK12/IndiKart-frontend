@@ -64,7 +64,7 @@ const Orders = () => {
                         Processing
                     </span>
                 ),
-                action: <Link className="bg-cyan-400 text-white px-2 py-1 rounded" to={`/admin/transaction/12`}>Manage</Link>,
+                action: <Link className="bg-cyan-400 text-white px-2 py-1 rounded" to={`/order/12`}>View</Link>,
             },
             {
                 _id: "12",
@@ -78,7 +78,7 @@ const Orders = () => {
                         Processing
                     </span>
                 ),
-                action: <Link className="bg-cyan-400 text-white px-2 py-1 rounded" to={`/admin/transaction/12`}>Manage</Link>,
+                action: <Link className="bg-cyan-400 text-white px-2 py-1 rounded" to={`/order/32`}>View</Link>,
             },
         ],
         );

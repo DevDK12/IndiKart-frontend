@@ -13,6 +13,7 @@ const Search = lazy(() => import('./pages/shop/search'));
 const Cart = lazy(() => import('./pages/shop/cart'));
 const Shipping = lazy(() => import('./pages/shop/shipping'));
 const Orders = lazy(() => import('./pages/shop/orders'));
+const OrderDetail = lazy(() => import('./pages/shop/order_detail'));
 
 
 const Dashboard = lazy(() => import('./pages/admin/main/dashboard'));
@@ -58,6 +59,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/shipping" element={<Shipping />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/order/:id" element={<OrderDetail />} />
       </Route>
 
 
