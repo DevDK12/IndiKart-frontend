@@ -50,72 +50,80 @@ function TableHOC<T extends object>(
 
 
 
+
         return (
-            <div className={containerClassname}>
-                <h2 className="subtitle text-base xs:text-xl sm:text-2xl text-center">{heading}</h2>
+            <div className={`${containerClassname} h-full bg-primary-100 flex flex-col`}>
+                <h2 className={`subtitle text-base xs:text-xl sm:text-2xl text-center`}>{heading}</h2>
+                <div className="flex flex-col justify-between px-4 py-4 h-full rounded">
+                    <div className="-my-2 overflow-x-auto hide-scrollbar sm:-mx-6 lg:-mx-8">
+                        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
 
-                <table
-                    className="border-collapse w-full h-full text-left align-middle"
-                    {...getTableProps()}
-                >
-                    <thead>
-                        {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th
-                                        className="text-primary-txt font-semibold text-lg py-4 px-2 xs:py-5 xs:px-3 sm:py-6 sm:px-4 lg:py-8 lg:px-6"
-                                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                                    >
-                                        <div className="relative ">
+                                <table className="min-w-full divide-y divide-gray-200" {...getTableProps()}>
+                                    <thead className="bg-gray-400">
+                                        {headerGroups.map((headerGroup) => (
+                                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                                {headerGroup.headers.map((column) => (
+                                                    <th
+                                                        scope="col"
+                                                        className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider"
+                                                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                                                    >
+                                                        <div className="flex items-center">
+                                                            {column.render("Header")}
+                                                            {column.isSorted ? (
+                                                                column.isSortedDesc ? (
+                                                                    <AiOutlineSortDescending />
+                                                                ) : (
+                                                                    <AiOutlineSortAscending />
+                                                                )
+                                                            ) : (
+                                                                ""
+                                                            )}
+                                                        </div>
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </thead>
+                                    <tbody className="bg-gray-300 divide-y text-black divide-gray-400" {...getTableBodyProps()}>
+                                        {page.map((row) => {
+                                            prepareRow(row);
 
-                                            {column.render("Header")}
-                                            {column.isSorted && (
-                                                <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 translate-x-1/2">
-                                                    {column.isSortedDesc ? (
-                                                        <AiOutlineSortDescending />
-                                                    ) : (
-                                                        <AiOutlineSortAscending />
-                                                    )}
-                                                </span>
-                                            )}
-                                        </div>
-
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {page.map((row) => {
-
-                            prepareRow(row);
-
-                            return (
-                                <tr className="shadow-lg" {...row.getRowProps()}>
-                                    {row.cells.map((cell) => (
-                                        <td className="p-2 xs:p-3 sm:p-4" {...cell.getCellProps()}>
-                                            {cell.render("Cell")}
-                                        </td>
-                                    ))}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-                {showPagination && (
-                    <div className="mt-6 flex justify-center items-center font-semibold gap-4">
-                        <button className="bg-cyan-400 px-4 py-1 rounded-lg disabled:bg-cyan-100 disabled:text-cyan-300 disabled:cursor-not-allowed" disabled={!canPreviousPage} onClick={previousPage}>
-                            Prev
-                        </button>
-                        <span>{`${pageIndex + 1} of ${pageCount}`}</span>
-                        <button className="bg-cyan-400 px-4 py-1 rounded-lg disabled:bg-cyan-100 disabled:text-cyan-300 disabled:cursor-not-allowed" disabled={!canNextPage} onClick={nextPage}>
-                            Next
-                        </button>
+                                            return (
+                                                <tr {...row.getRowProps()}>
+                                                    {row.cells.map((cell) => (
+                                                        <td
+                                                            className="px-6 py-4 whitespace-nowrap"
+                                                            {...cell.getCellProps()}
+                                                        >
+                                                            <div className="text-sm text-gray-900">{cell.render("Cell")}</div>
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                )}
+                    {showPagination && (
+                        <div className="mt-6 flex justify-center items-center font-semibold gap-4">
+                            <button className="bg-cyan-400 px-4 py-1 rounded-lg disabled:bg-cyan-100 disabled:text-cyan-300 disabled:cursor-not-allowed" disabled={!canPreviousPage} onClick={previousPage}>
+                                Prev
+                            </button>
+                            <span>{`${pageIndex + 1} of ${pageCount}`}</span>
+                            <button className="bg-cyan-400 px-4 py-1 rounded-lg disabled:bg-cyan-100 disabled:text-cyan-300 disabled:cursor-not-allowed" disabled={!canNextPage} onClick={nextPage}>
+                                Next
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         );
     };
+
 }
 
 export default TableHOC;
