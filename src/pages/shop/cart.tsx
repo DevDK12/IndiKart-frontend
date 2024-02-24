@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { faker } from '@faker-js/faker'
 import CartItemCard from "../../components/shop/CartItemCard";
 import { useEffect, useState } from "react";
-import Input from "../../components/ui/Input";
 
 
 
