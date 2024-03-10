@@ -35,8 +35,8 @@ const ManageProduct = lazy(() => import('./pages/admin/main/product/manageProduc
 const ManageTransaction = lazy(() => import('./pages/admin/main/transaction/manageTransaction'));
 
 
-const Login = lazy(() => import('./pages/auth/login'));
-const Signup = lazy(() => import('./pages/auth/signup'));
+import Login from './pages/auth/login';
+import Signup from './pages/auth/signup';
 
 
 

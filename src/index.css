@@ -127,12 +127,16 @@
     .cover-image {
         background: url("../src/assets/images/cover.jpg") no-repeat center / cover;
     }
-    
-    
+
+    .cover-gradient {
+        background: linear-gradient(to top, #ff00fb9e 0%, rgba(0, 255, 255, 0.718) 48% 48%);
+    }
+
+
     .login-cover {
         background: url("../src/assets/images/login_cover.jpg") no-repeat center / cover;
 
     }
-    
+
 
 }
