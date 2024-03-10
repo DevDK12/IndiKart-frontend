@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { lazy, useEffect } from 'react';
 
 
@@ -53,50 +53,50 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  const { loading: userLoaidng } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
+  const { loading: userLoaidng, user } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
 
   useEffect(() => {
     const auth = getAuth();
 
 
-      onAuthStateChanged(auth, async (firebaseUser) => {
+    onAuthStateChanged(auth, async (firebaseUser) => {
 
-        if (!firebaseUser){
-          dispatch(logoutUser());
-          return;
-        }
+      if (!firebaseUser) {
+        dispatch(logoutUser());
+        return;
+      }
 
-        try{
-          const data = await getSingleUser(firebaseUser?.uid);
+      try {
+        const data = await getSingleUser(firebaseUser?.uid);
 
-          if ('error' in data) throw new Error('User not found');
-          const { status, data: { user: mongoUser } } = data;
+        if ('error' in data) throw new Error('User not found');
+        const { status, data: { user: mongoUser } } = data;
 
-          if (status !== 'success') throw new Error('User not found');
+        if (status !== 'success') throw new Error('User not found');
 
-          dispatch(loginUser(mongoUser));
-        }
-        catch (err) {
-          dispatch(logoutUser());
-          toast.error('User not found in mongodb, Please clear cache and try again');
-        }
-      })
+        dispatch(loginUser(mongoUser));
+      }
+      catch (err) {
+        dispatch(logoutUser());
+        toast.error('User not found in mongodb, Please clear cache and try again');
+      }
+    })
 
   }, [dispatch])
 
 
+  const isLoggedIn = user ? true : false;
+  const adminOnly = isLoggedIn && user?.role === 'admin';
 
 
-
-  if (userLoaidng) return <div className='h-screen w-screen title grid place-items-center'>Loading user...</div>;
+  if (userLoaidng)
+    return <div className='h-screen w-screen title grid place-items-center'>Loading user...</div>;
 
   return (
     <Routes>
 
-
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-
+      <Route path="/login" element={!isLoggedIn ? <Login /> : <Navigate to='/'  />} />
+      <Route path="/signup" element={!isLoggedIn ? <Signup /> : <Navigate to='/' />} />
 
 
       <Route element={<Layout />}>
@@ -112,29 +112,27 @@ const App = () => {
       <Route element={<AdminLayout />}>
 
         {/* Admin Pages */}
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/product" element={<Product />} />
-        <Route path="/admin/transaction" element={<Transaction />} />
-        <Route path="/admin/customer" element={<Customer />} />
+        <Route path="/admin/dashboard" element={adminOnly ? <Dashboard /> : <Navigate to='/' />} />
+        <Route path="/admin/product" element={adminOnly ? <Product /> : <Navigate to='/' />} />
+        <Route path="/admin/transaction" element={adminOnly ? <Transaction /> : <Navigate to='/' />} />
+        <Route path="/admin/customer" element={adminOnly ? <Customer /> : <Navigate to='/' />} />
 
 
         {/* Charts */}
-        <Route path="/admin/chart/bar" element={<Bar />} />
-        <Route path="/admin/chart/pie" element={<Pie />} />
-        <Route path="/admin/chart/line" element={<Line />} />
+        <Route path="/admin/chart/bar" element={adminOnly ? <Bar /> : <Navigate to='/' />} />
+        <Route path="/admin/chart/pie" element={adminOnly ? <Pie /> : <Navigate to='/' />} />
+        <Route path="/admin/chart/line" element={adminOnly ? <Line /> : <Navigate to='/' />} />
 
         {/* Apps */}
-        <Route path="/admin/app/stopwatch" element={<Stopwatch />} />
-        <Route path="/admin/app/coupon" element={<Coupon />} />
-        <Route path="/admin/app/toss" element={<Toss />} />
+        <Route path="/admin/app/stopwatch" element={adminOnly ? <Stopwatch /> : <Navigate to='/' />} />
+        <Route path="/admin/app/coupon" element={adminOnly ? <Coupon /> : <Navigate to='/' />} />
+        <Route path="/admin/app/toss" element={adminOnly ? <Toss /> : <Navigate to='/' />} />
 
         {/* Management */}
-        <Route path="/admin/product/new" element={<NewProduct />} />
-        <Route path="/admin/product/:id" element={<ManageProduct />} />
-        <Route path="/admin/transaction/:id" element={<ManageTransaction />} />
-
+        <Route path="/admin/product/new" element={adminOnly ? <NewProduct /> : <Navigate to='/' />} />
+        <Route path="/admin/product/:id" element={adminOnly ? <ManageProduct /> : <Navigate to='/' />} />
+        <Route path="/admin/transaction/:id" element={adminOnly ? <ManageTransaction /> : <Navigate to='/' />} />
       </Route>
-
     </Routes>
   )
 }
