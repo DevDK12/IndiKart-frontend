@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // import { server } from "../store";
-import { MesssageResponse } from "../../Types/apiTypes";
-import { IRegisterUserApi, ILoginUserApi } from "../../Types/userTypes";
+import { MesssageResponse, UserResponse } from "../../Types/apiTypes";
+import { IRegisterUserApi, ILoginUserApi } from "../../Types/user-types";
 
 
 const server = import.meta.env.VITE_SERVER;
@@ -33,6 +33,12 @@ export const userApi = createApi({
 });
 
 
+
+export const getSingleUser = async (id: string): Promise<UserResponse> => {
+    const response = await fetch(`${server}/api/v1/user/${id}`);
+    const data = await response.json();
+    return data;
+}
 
 
 export const { useRegisterUserMutation, useLoginUserMutation, useAllUsersQuery } = userApi;

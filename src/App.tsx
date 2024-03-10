@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { lazy } from 'react';
+import { lazy, useEffect } from 'react';
 
 
 import Layout from './components/Layout/Layout';
@@ -37,6 +37,12 @@ const ManageTransaction = lazy(() => import('./pages/admin/main/transaction/mana
 
 import Login from './pages/auth/login';
 import Signup from './pages/auth/signup';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { loginUser, logoutUser } from './redux/reducer/user-slice';
+import { getSingleUser } from './redux/api/userApi';
+import toast from 'react-hot-toast';
+import { IUserReducerInitialState } from './Types/user-types';
 
 
 
@@ -44,10 +50,50 @@ import Signup from './pages/auth/signup';
 
 
 const App = () => {
+
+  const dispatch = useDispatch();
+
+  const { loading: userLoaidng } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
+
+  useEffect(() => {
+    const auth = getAuth();
+
+
+      onAuthStateChanged(auth, async (firebaseUser) => {
+
+        if (!firebaseUser){
+          dispatch(logoutUser());
+          return;
+        }
+
+        try{
+          const data = await getSingleUser(firebaseUser?.uid);
+
+          if ('error' in data) throw new Error('User not found');
+          const { status, data: { user: mongoUser } } = data;
+
+          if (status !== 'success') throw new Error('User not found');
+
+          dispatch(loginUser(mongoUser));
+        }
+        catch (err) {
+          dispatch(logoutUser());
+          toast.error('User not found in mongodb, Please clear cache and try again');
+        }
+      })
+
+  }, [dispatch])
+
+
+
+
+
+  if (userLoaidng) return <div className='h-screen w-screen title grid place-items-center'>Loading user...</div>;
+
   return (
     <Routes>
 
-    
+
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
@@ -86,7 +132,7 @@ const App = () => {
         <Route path="/admin/product/new" element={<NewProduct />} />
         <Route path="/admin/product/:id" element={<ManageProduct />} />
         <Route path="/admin/transaction/:id" element={<ManageTransaction />} />
-        
+
       </Route>
 
     </Routes>

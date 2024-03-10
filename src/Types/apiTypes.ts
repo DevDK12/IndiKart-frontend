@@ -1,3 +1,4 @@
+import { TUser } from "./user-types"
 
 
 
@@ -11,7 +12,12 @@ export type MesssageResponse = {
 
 
 
-
+export type UserResponse = {
+    status: string, 
+    data: {
+        user: TUser
+    }
+}
 
 
 

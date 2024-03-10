@@ -1,11 +1,11 @@
 import { FormEvent, useState } from "react";
 import Input from "../../components/ui/Input"
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import toast from "react-hot-toast";
 import { useLoginUserMutation } from "../../redux/api/userApi";
-import { ILoginUserApi } from "../../Types/userTypes";
+import { ILoginUserApi } from "../../Types/user-types";
 import { Auth, UserCredential, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase";
 
@@ -18,6 +18,7 @@ const logo = "https://cdn.pixabay.com/photo/2014/04/02/10/16/fire-303309_640.png
 
 const Login = () => {
 
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -46,6 +47,7 @@ const Login = () => {
             const { status, message } = response.data;
             if (status === 'success') {
                 toast.success(message);
+                navigate('/');
             }
 
 
@@ -71,7 +73,6 @@ const Login = () => {
 
             const response = await loginUser(user);
 
-            console.log(response);
 
             if ('error' in response) {
                 throw new Error('Login failed');
@@ -80,6 +81,7 @@ const Login = () => {
             const { status, message } = response.data;
             if (status === 'success') {
                 toast.success(message);
+                navigate('/')
             }
         }
         catch (error) {
@@ -142,7 +144,7 @@ const Login = () => {
                             >
                                 <FcGoogle className="bg-white w-7 h-7 p-1 rounded-l-md " /> <span className="text-sm">Login with Google</span>
                             </button>
-                            <p className="mx-auto text-xs">Already logged in? <Link className="text-blue-600 underline" to="/login">Signup now</Link></p>
+                            <p className="mx-auto text-xs">Already logged in? <Link className="text-blue-600 underline" to="/signup">Signup now</Link></p>
                         </div>
                     </div>
                 </div>

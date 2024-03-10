@@ -1,12 +1,12 @@
 import { FormEvent, useState } from "react";
 import Input from "../../components/ui/Input"
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { v4 as uuid } from 'uuid';
 import toast from "react-hot-toast";
 import { useRegisterUserMutation } from "../../redux/api/userApi";
-import { IRegisterUserApi } from "../../Types/userTypes";
+import { IRegisterUserApi } from "../../Types/user-types";
 import { Auth, UserCredential, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase";
 
@@ -19,7 +19,7 @@ const logo = "https://cdn.pixabay.com/photo/2014/04/02/10/16/fire-303309_640.png
 
 const Signup = () => {
 
-
+    const navigate = useNavigate();
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -63,6 +63,7 @@ const Signup = () => {
             const { status, message } = response.data;
             if (status === 'success') {
                 toast.success(message);
+                navigate('/login');
             }
             // console.log(status, message);
 
@@ -106,6 +107,7 @@ const Signup = () => {
             const { status, message } = response.data;
             if (status === 'success') {
                 toast.success(message);
+                navigate('/')
             }
         }
         catch (error) {

@@ -1,23 +1,23 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
     FaSearch,
     FaShoppingBag,
     FaSignInAlt,
-    FaUser,
     FaSignOutAlt,
 } from "react-icons/fa";
 import { useState } from "react";
 import Avatar from "../ui/Avatar";
+import { IUserReducerInitialState } from "../../Types/user-types";
+import { logoutUser } from "../../redux/reducer/user-slice";
+import toast from "react-hot-toast";
+import { getAuth, signOut } from "firebase/auth";
 
 
 
 
 
-const user = {
-    _id: "aksdf",
-    role: "admin",
-    // role: "user", 
-}
+
 
 
 const url = "https://cdn.pixabay.com/photo/2014/04/02/10/16/fire-303309_640.png";
@@ -25,10 +25,28 @@ const url = "https://cdn.pixabay.com/photo/2014/04/02/10/16/fire-303309_640.png"
 
 
 const Header = () => {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const {user} = useSelector((state: {userSlice: IUserReducerInitialState}) => state.userSlice);
+
+
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const logoutHandler = async () => {
-        setIsOpen(false)
+        const auth = getAuth();
+        signOut(auth)
+            .then(() => {
+                dispatch(logoutUser());
+                navigate('/');
+                toast.success('Logged out');
+            })
+            .catch((err) => {
+                // An error happened.
+                toast.error(err.message || 'Loggeg out failed');
+            }
+        );
     };
 
     return (
@@ -81,7 +99,7 @@ const Header = () => {
                             </dialog>
                         </>
                     ) : (
-                        <Link to={"/login"}>
+                        <Link to={"/signup"}>
                             <FaSignInAlt />
                         </Link>
                     )}
