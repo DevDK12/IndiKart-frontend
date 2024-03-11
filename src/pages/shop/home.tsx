@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { ErrorResponse, Link } from "react-router-dom";
 import { useLatestProductsQuery } from '../../redux/api/productApi';
 import Products from "../../components/shop/Products";
 import toast from "react-hot-toast";
@@ -9,20 +9,23 @@ import toast from "react-hot-toast";
 
 const Home = () => {
 
-    const { data, isError, isLoading, isSuccess, } = useLatestProductsQuery();
+    const { data, isError, isLoading, isSuccess, error } = useLatestProductsQuery();
 
 
     let products;
-    if(isError) toast.error('Can not fetch products');
-    if(isLoading){
+    if (isError) {
+        const err = error as ErrorResponse;
+        toast.error(err.data.message);
+    }
+    if (isLoading) {
         products = <p>Loading...</p>
     }
-    if(isSuccess){
-        const { status, data: {products: latestProducts} } = data;
+    if (isSuccess) {
+        const { status, data: { products: latestProducts } } = data;
         console.log(status, latestProducts);
         products = <Products products={latestProducts} />
     }
-    
+
 
 
     return (

@@ -33,4 +33,13 @@ export type ProductsResponse = {
 
 
 
+export interface ErrorResponse {
+    status: number,
+    data: {
+        status: string;
+        message: string; 
+        error?: string;
+        stack?: string;
+    }
+}
 
