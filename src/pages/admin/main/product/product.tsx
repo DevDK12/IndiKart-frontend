@@ -1,8 +1,13 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import TableHOC from "../../../../components/ui/TableHOC";
+import { useUserProductsQuery } from "../../../../redux/api/productApi";
+import { useSelector } from "react-redux";
+import { IUserReducerInitialState } from "../../../../Types/user-types";
+import toast from "react-hot-toast";
+import { ErrorResponse } from "../../../../Types/apiTypes";
 
 
 
@@ -41,38 +46,40 @@ const columns: Column<DataType>[] = [
 
 
 
-const img = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=804";
-
-
-const img2 = "https://m.media-amazon.com/images/I/514T0SvwkHL._SL1500_.jpg";
-
-
-
-const arr: Array<DataType> = [
-    {
-        photo: <img className="w-20 rounded-md" src={img} alt="Shoes" />,
-        name: "Puma Shoes Air Jordan Cook Nigga 2023",
-        price: 690,
-        stock: 3,
-        action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold" to="/admin/product/sajknaskd">Manage</Link>,
-    },
-
-    {
-        photo: <img className="w-20 rounded-md" src={img2} alt="Shoes" />,
-        name: "Macbook",
-        price: 232223,
-        stock: 213,
-        action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold" to="/admin/product/sdaskdnkasjdn">Manage</Link>,
-    },
-
-];
-
-
-
+const server = import.meta.env.VITE_SERVER;
 
 
 const Products = () => {
-    const [rows, setRows] = useState<DataType[]>(arr);
+
+    const { user } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
+
+    const [rows, setRows] = useState<DataType[]>([]);
+
+
+    const { data: productsData, isError, isLoading: productsLoading, isSuccess, error } = useUserProductsQuery(user?._id as string);
+
+
+    useEffect(() => {
+        if (productsData && isSuccess) {
+            const { data: { products } } = productsData;
+            setRows(products.map(product => ({
+                photo: <img className="w-20 rounded-md" src={`${server}/${product.photo}`} alt="Shoes" />,
+                name: product.name,
+                price: product.price,
+                stock: product.stock,
+                action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold" to={`/admin/product/${product._id}`}>Manage</Link>,
+            })))
+        }
+    }, [productsData, isSuccess])
+
+
+
+
+    if (isError) {
+        const err = error as ErrorResponse;
+        toast.error(err.data.message);
+    }
+
 
 
     const Table = TableHOC<DataType>(
@@ -87,6 +94,7 @@ const Products = () => {
 
     return (
         <div className="main-section">
+            {productsLoading && <p>Loading Products...</p>}
             {Table()}
             <Link
                 to="/admin/product/new"

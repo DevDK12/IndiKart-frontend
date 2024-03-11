@@ -10,6 +10,9 @@ export const productApi = createApi({
     endpoints: (builder) => ({
         latestProducts: builder.query<ProductsResponse, void>({
             query: () => 'latest',
+        }),
+        userProducts: builder.query<ProductsResponse, string>({
+            query: (userId) => `admin-products/${userId}`,
         })
     })
 })
@@ -18,4 +21,4 @@ export const productApi = createApi({
 
 
 
-export const { useLatestProductsQuery } = productApi;
+export const { useLatestProductsQuery, useUserProductsQuery } = productApi;
