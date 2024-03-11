@@ -1,3 +1,4 @@
+import { TProduct } from "./product-types"
 import { TUser } from "./user-types"
 
 
@@ -13,13 +14,20 @@ export type MesssageResponse = {
 
 
 export type UserResponse = {
-    status: string, 
+    status: string,
     data: {
         user: TUser
     }
 }
 
 
+
+export type ProductsResponse = {
+    status: string,
+    data: {
+        products: TProduct[]
+    }
+}
 
 
 

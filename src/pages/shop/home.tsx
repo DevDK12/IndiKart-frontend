@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-
+import { useLatestProductsQuery } from '../../redux/api/productApi';
 import Products from "../../components/shop/Products";
-import {data} from '../../utils/Shop_products';
+import toast from "react-hot-toast";
 
 
 
@@ -9,11 +9,25 @@ import {data} from '../../utils/Shop_products';
 
 const Home = () => {
 
+    const { data, isError, isLoading, isSuccess, } = useLatestProductsQuery();
+
+
+    let products;
+    if(isError) toast.error('Can not fetch products');
+    if(isLoading){
+        products = <p>Loading...</p>
+    }
+    if(isSuccess){
+        const { status, data: {products: latestProducts} } = data;
+        console.log(status, latestProducts);
+        products = <Products products={latestProducts} />
+    }
+    
 
 
     return (
         <div className="flex flex-col gap-24 overflow-auto hide-scrollbar h-full w-full 
-            px-5 py-4 xs:px-8 sm:px-12 md:px-16 lg:px-20 xl:px-24 xl:py-4" 
+            px-5 py-4 xs:px-8 sm:px-12 md:px-16 lg:px-20 xl:px-24 xl:py-4"
         >
             <section className="w-full h-[18.75rem">
                 <div className="cover-image h-[18.75rem] rounded-md"></div>
@@ -26,10 +40,7 @@ const Home = () => {
                         More
                     </Link>
                 </div>
-
-                <Products 
-                    products={data.products}
-                />
+                {products}
             </section>
         </div>
     );
