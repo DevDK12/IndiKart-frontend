@@ -2,6 +2,8 @@ import { ErrorResponse, Link } from "react-router-dom";
 import { useLatestProductsQuery } from '../../redux/api/productApi';
 import Products from "../../components/shop/Products";
 import toast from "react-hot-toast";
+import { useMemo } from "react";
+import { useMediaQuery } from "react-responsive";
 
 
 
@@ -9,7 +11,18 @@ import toast from "react-hot-toast";
 
 const Home = () => {
 
-    const { data, isError, isLoading, isSuccess, error } = useLatestProductsQuery();
+    const isMd = useMediaQuery({ query: '(max-width: 768px' });
+    const isLg = useMediaQuery({ query: '(max-width: 1024px' });
+    const isXl = useMediaQuery({ query: '(max-width: 1280px' });
+
+
+    const productsPerPage = useMemo(() => {
+        if (isMd) return 4;
+        else if (isLg || isXl) return 3;
+        else return 4;
+    }, [isMd, isLg, isXl]);
+
+    const { data, isError, isLoading, isSuccess, error } = useLatestProductsQuery({ productsPerPage });
 
 
     let products;
@@ -20,10 +33,11 @@ const Home = () => {
     if (isLoading) {
         products = <p>Loading...</p>
     }
+
     if (isSuccess && data?.data?.products.length === 0) {
         products = <p>Empty</p>
     }
-    if (isSuccess) {
+    else if (isSuccess) {
         const { data: { products: latestProducts } } = data;
         products = <Products products={latestProducts} />
     }

@@ -21,6 +21,10 @@ export type UserResponse = {
 }
 
 
+export type ProductsRequest = {
+    productsPerPage: number,
+}
+
 
 export type ProductsResponse = {
     status: string,

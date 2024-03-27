@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CategoriesResponse, ProductsResponse, SearchProductsRequest, SearchProductsResponse } from "../../Types/apiTypes";
+import { CategoriesResponse, ProductsRequest, ProductsResponse, SearchProductsRequest, SearchProductsResponse } from "../../Types/apiTypes";
 
 
 const server = import.meta.env.VITE_SERVER;
@@ -7,13 +7,16 @@ const server = import.meta.env.VITE_SERVER;
 export const productApi = createApi({
     reducerPath: 'productApi',
     baseQuery: fetchBaseQuery({ baseUrl: `${server}/api/v1/product` }),
+
     endpoints: (builder) => ({
-        latestProducts: builder.query<ProductsResponse, void>({
-            query: () => 'latest',
+        latestProducts: builder.query<ProductsResponse, ProductsRequest>({
+            query: ({productsPerPage}) => `latest?product_per_page=${productsPerPage}`,
         }),
+
         userProducts: builder.query<ProductsResponse, string>({
             query: (userId) => `admin-products/${userId}`,
         }),
+        
         searchProducts: builder.query<SearchProductsResponse, SearchProductsRequest>({
             query: ({ category, page, price, search, sort, productsPerPage }) => {
                 let base = `all?search=${search}&page=${page}`;
