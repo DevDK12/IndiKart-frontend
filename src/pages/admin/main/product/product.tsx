@@ -77,7 +77,7 @@ const Products = () => {
 
     if (isError) {
         const err = error as ErrorResponse;
-        toast.error(err.data.message);
+        toast.error(err?.data?.message || 'No response from server');
     }
 
 

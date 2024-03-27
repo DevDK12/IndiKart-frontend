@@ -15,14 +15,16 @@ const Home = () => {
     let products;
     if (isError) {
         const err = error as ErrorResponse;
-        toast.error(err.data.message);
+        toast.error(err?.data?.message || 'No response from server');
     }
     if (isLoading) {
         products = <p>Loading...</p>
     }
+    if (isSuccess && data?.data?.products.length === 0) {
+        products = <p>Empty</p>
+    }
     if (isSuccess) {
-        const { status, data: { products: latestProducts } } = data;
-        console.log(status, latestProducts);
+        const { data: { products: latestProducts } } = data;
         products = <Products products={latestProducts} />
     }
 

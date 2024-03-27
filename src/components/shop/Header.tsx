@@ -44,7 +44,7 @@ const Header = () => {
             })
             .catch((err) => {
                 // An error happened.
-                toast.error(err.message || 'Loggeg out failed');
+                toast.error(err?.message || 'Loggeg out failed');
             }
         );
     };
