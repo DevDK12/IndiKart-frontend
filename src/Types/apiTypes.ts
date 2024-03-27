@@ -37,9 +37,36 @@ export interface ErrorResponse {
     status: number,
     data: {
         status: string;
-        message: string; 
+        message: string;
         error?: string;
         stack?: string;
     }
 }
 
+
+
+export type CategoriesResponse = {
+    status: string,
+    data: {
+        categories: string[]
+    }
+}
+
+
+export type SearchProductsResponse = {
+    status: string,
+    data: {
+        products: TProduct[],
+        totalPage: number,
+    }
+}
+
+
+export type SearchProductsRequest = {
+    price: number,
+    page: number,
+    search: string,
+    sort: string,
+    category: string,
+    productsPerPage: number,
+}

@@ -1,14 +1,32 @@
 import Input from "../../components/ui/Input"
 
-import { data } from "../../utils/Shop_products";
 import Products from "../../components/shop/Products";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useCategoriesQuery, useSearchProductsQuery } from "../../redux/api/productApi";
+import { ErrorResponse } from "react-router-dom";
+import toast from "react-hot-toast";
 
+import { useMediaQuery } from 'react-responsive';
 
 
 
 
 const Search = () => {
+
+    const isMd = useMediaQuery({ query: '(max-width: 768px' });
+    const isLg = useMediaQuery({ query: '(max-width: 1024px' });
+    const isXl = useMediaQuery({ query: '(max-width: 1280px' });
+    const is2Xl = useMediaQuery({ query: '(max-width: 1536px' });
+
+
+    const productsPerPage = useMemo(() => {
+        if (isMd) return 4;
+        else if (isLg) return 6;
+        else if (isXl) return 3;
+        else if (is2Xl) return 4;
+        else return 4;
+    }, [isMd, isLg, isXl, is2Xl]);
+
 
     const [search, setSearch] = useState<string>('');
     const [sort, setSort] = useState<string>('');
@@ -16,9 +34,51 @@ const Search = () => {
     const [category, setCategory] = useState<string>('');
     const [page, setPage] = useState<number>(1);
 
-    const isPrevPage = page <= 1;
-    const isNextPage = page >= 4;
 
+
+
+
+    const { data: categoriesData, isSuccess: categorySuccess, isError: isCategoryError, error: categoryError } = useCategoriesQuery();
+    if (isCategoryError) {
+        const err = categoryError as ErrorResponse;
+        toast.error(err?.data?.message || 'No response from server');
+    }
+
+
+    const { data: productsData, isLoading: productsLoading, isSuccess: productSuccess, isError: isProductsError, error: productsError } = useSearchProductsQuery({
+        category,
+        page,
+        price: maxPrice,
+        search,
+        sort,
+        productsPerPage,
+    });
+    let totalPage = 1;
+
+    if (isProductsError) {
+        const err = productsError as ErrorResponse;
+        toast.error(err?.data?.message || 'No response from server');
+    }
+
+
+    let content: JSX.Element | null = null;
+    if (productsLoading) {
+        content = <h1>Loading Products...</h1>
+    }
+
+    if (productSuccess && productsData.data?.products.length === 0) {
+        content = <h1>No Products Found</h1>
+    }
+
+    if (productSuccess && productsData?.data.products) {
+        totalPage = productsData?.data.totalPage;
+        content = <Products
+            products={productsData?.data.products}
+        />
+    }
+
+    const isPrevPage = page <= 1;
+    const isNextPage = page >= totalPage;
 
 
 
@@ -57,12 +117,13 @@ const Search = () => {
                         className="text-black bg-white rounded-md p-1 focus:outline-none focus:border-cyan-400 border-2 border-gray-400 "
                     >
                         <option value="">ALL</option>
-                        <option value="mac">Mac</option>
-                        <option value="windows">Windows</option>
+                        {categorySuccess && categoriesData?.data.categories.map((i, index) => (
+                            <option key={index} value={i}>{i.toUpperCase()}</option>
+                        ))}
                     </select>
                 </div>
             </aside>
-            <main className="bg-primary-100 text-primary-txt rounded-md px-10 py-4 w-full h-full flex flex-col gap-6 relative">
+            <main className="bg-primary-200 text-primary-txt rounded-md px-10 py-4 w-full flex flex-col gap-6 relative">
                 <h1 className="title lg:text-4xl">Products</h1>
                 <Input
                     variant="SEARCH"
@@ -72,10 +133,11 @@ const Search = () => {
                     value={search}
                 />
 
-                <Products
-                    products={data.products}
-                />
-                <article className="mx-auto flex gap-4 items-center absolute bottom-5 left-1/2 -translate-x-1/2">
+
+                {content}
+
+
+                <article className="w-[200px] flex gap-4 items-center justify-evenly absolute bottom-5 left-1/2 -translate-x-1/2 ">
                     <button
                         className="bg-primary-300 px-2 py-1 rounded disabled:cursor-not-allowed disabled:opacity-70"
                         onClick={() => { setPage(page => page - 1) }}
@@ -83,7 +145,7 @@ const Search = () => {
                     >
                         Prev
                     </button>
-                    <span>{page} of 4</span>
+                    <span>{page} of {totalPage}</span>
                     <button
                         className="bg-primary-300 px-2 py-1 rounded disabled:cursor-not-allowed disabled:opacity-70"
                         onClick={() => { setPage(page => page + 1) }}

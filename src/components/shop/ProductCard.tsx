@@ -19,16 +19,16 @@ const ProductCard = ({ photo, name, price, handler }: ProductCardProps) => {
 
 
     return (
-        <div className="rounded-md h-[330px] w-3/4 xs:w-full relative flex flex-col gap-4 pb-4 group cursor-pointer bg-primary-100 
+        <div className="rounded-md min-h-[300px] w-[200px] relative flex flex-col gap-4 pb-4 group cursor-pointer bg-primary-100 
             hover:opacity-45 hover:scale-105 transition-all ease-in duration-300">
             <img
-                className="h-[220px] rounded-t-md w-full object-cover"
+                className="h-[170px] rounded-t-md w-full object-cover"
                 src={`${server}/${photo}`}
                 alt={name}
             />
 
 
-            <div className="flex flex-col items-center gap-2">
+            <div className="px-4 flex flex-col items-center gap-2">
                 <p>{name}</p>
                 <span>₹{price}</span>
             </div>
