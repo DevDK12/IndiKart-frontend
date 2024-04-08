@@ -9,6 +9,8 @@ import { useRegisterUserMutation } from "../../redux/api/userApi";
 import { IRegisterUserApi } from "../../Types/user-types";
 import { Auth, UserCredential, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
 
 
@@ -57,7 +59,8 @@ const Signup = () => {
                 // console.dir(response.error.data.stack)
                 // console.dir(response.error.data.status)
                 // throw new Error(response.error.data.message);
-                throw new Error('Signup failed');
+                const error = response.error as FetchBaseQueryError | SerializedError;
+                throw new Error(error.data.message);
             }
 
             const { status, message } = response.data;
@@ -70,7 +73,7 @@ const Signup = () => {
 
         }
         catch (err) {
-            toast.error(err?.message);
+            toast.error(err.message || 'Signup failed');
         }
     };
 

@@ -8,6 +8,8 @@ import { useLoginUserMutation } from "../../redux/api/userApi";
 import { ILoginUserApi } from "../../Types/user-types";
 import { Auth, UserCredential, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
 
 
@@ -41,7 +43,8 @@ const Login = () => {
 
 
             if ('error' in response) {
-                throw new Error('Login failed');
+                const error = res.error as FetchBaseQueryError | SerializedError;
+                throw new Error(error.data.message);
             }
 
             const { status, message } = response.data;
@@ -53,8 +56,7 @@ const Login = () => {
 
         }
         catch (err) {
-            // toast.error(err.message);
-            toast.error('Log in failed');
+            toast.error(err.message || 'Log in failed');
         }
     };
 
