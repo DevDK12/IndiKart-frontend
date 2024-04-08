@@ -1,17 +1,29 @@
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Input from "../../../../components/ui/Input";
-
+import { useCreateProductMutation } from "../../../../redux/api/productApi";
+import { useSelector } from "react-redux";
+import { IUserReducerInitialState } from "../../../../Types/user-types";
+import toast from "react-hot-toast";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 
 
 
 const NewProduct = () => {
 
+    const { user } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
+
+    const navigate = useNavigate();
+
+    const [createProduct] = useCreateProductMutation();
+
 
     const [name, setName] = useState<string>("");
     const [category, setCategory] = useState<string>("");
-    const [price, setPrice] = useState<number>(1000);
-    const [stock, setStock] = useState<number>(1);
+    const [price, setPrice] = useState<string>("");
+    const [stock, setStock] = useState<string>("");
     const [photoPrev, setPhotoPrev] = useState<string>("");
     const [photo, setPhoto] = useState<File>();
 
@@ -34,6 +46,41 @@ const NewProduct = () => {
     };
 
 
+    const submitHandler = async (e : FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        
+        if(!name || !category || !price || !stock || !photo)    return;
+
+        const formData = new FormData();
+        formData.append('user', user?._id as string);
+        formData.append("name", name);
+        formData.append("price", String(price));
+        formData.append("stock", String(stock));
+        formData.append("category", category);
+        if(photo) formData.append("photo", photo);
+
+        try{
+            const res = await createProduct(formData);
+
+
+            if('error' in res){
+                const error = res.error as FetchBaseQueryError | SerializedError;
+                throw new Error(error.data.message);
+            }
+
+            const { status, message } = res.data;
+            if (status === 'success') {
+                toast.success(message);
+                navigate('/admin/product');
+            }
+        }
+        catch(err ){
+            toast.error(err.message || 'Error creating product');
+        }
+
+    }
+
+
 
     return (
         <>
@@ -41,6 +88,7 @@ const NewProduct = () => {
                 <form
                     className="main-container  bg-primary-100 flex flex-col gap-3
                     sm:w-2/3 sm:gap-4 md:w-3/5 md:gap-6 lg:w-7/12 xl:w-5/12"
+                    onSubmit={submitHandler}
                 >
                     <h2 className="title" >New Product</h2>
 
@@ -57,7 +105,7 @@ const NewProduct = () => {
                         type="number"
                         placeholder="Price"
                         value={price}
-                        onChange={(e) => setPrice(Number(e.target.value))}
+                        onChange={(e) => setPrice(e.target.value)}
                     />
 
                     <Input
@@ -65,7 +113,7 @@ const NewProduct = () => {
                         type="number"
                         placeholder="Stock"
                         value={stock}
-                        onChange={(e) => setStock(Number(e.target.value))}
+                        onChange={(e) => setStock(e.target.value)}
                     />
 
                     <Input

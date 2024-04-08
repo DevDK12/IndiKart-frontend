@@ -184,7 +184,7 @@ const Signup = () => {
                                 label="Gender"
                                 value={gender}
                                 options={['male', 'female']}
-                                onChange={(e) => setGender(e.target.value)}
+                                onSelect={(e) => setGender(e.target.value)}
                             />
                             <div className="lg:pl-32 grid place-items-center mt-8">
                                 <button className="bg-cyan-400 text-white font-semibold text-sm w-2/5 mx-auto py-1 rounded-md"

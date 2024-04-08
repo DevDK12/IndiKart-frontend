@@ -1,19 +1,21 @@
+import { ChangeEvent } from "react"
 
 
 
 interface InputProps {
-    label?: string,
     type: string,
+    label?: string,
     placeholder?: string,
     value?: string | number,
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void ,
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
+    onSelect?: (e: ChangeEvent<HTMLSelectElement>) => void,
     options?: string[],
     variant?: 'FORM' | 'TEXTAREA' | 'FILE' | 'SEARCH' | 'DATE' | 'SELECT' ,
 }
 
 
 
-const Input = ({ label, type, placeholder, value, onChange, options, variant = 'FORM' }: InputProps) => {
+const Input = ({ label, type, placeholder, value, onChange, options, variant = 'FORM', onSelect }: InputProps) => {
 
 
     if (variant === "SEARCH") return (
@@ -47,7 +49,7 @@ const Input = ({ label, type, placeholder, value, onChange, options, variant = '
             <select
                 className={`w-full px-3 sm:w-2/3 rounded-md p-1 border-2 border-gray-400 focus:outline-none focus:border-cyan-400 text-secondary-txt`}
                 value={value}
-                onChange={onChange}
+                onSelect={onSelect}
             >
                 <option value="" disabled>{placeholder}</option>
                 {options?.map((option, index) => (
