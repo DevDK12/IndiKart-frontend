@@ -1,55 +1,12 @@
 import { VscError } from "react-icons/vsc";
 import { Link } from "react-router-dom";
-import { faker } from '@faker-js/faker'
 import CartItemCard from "../../components/shop/CartItemCard";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ICartReducerInitialState, TCartItem } from "../../Types/cart-types";
+import { calculatePrice, decrementCartItem, deleteFromCart, incrementCartItem } from "../../redux/reducer/cart-slice";
+import toast from "react-hot-toast";
 
-
-
-
-const cartItems = [
-    {
-        _id: "1",
-        name: "Product Second one",
-        price: 100,
-        stock: 10,
-        photo: faker.image.url(),
-        quantity: 1
-    },
-    {
-        _id: "2",
-        name: "Product third ba",
-        price: 200,
-        stock: 20,
-        photo: faker.image.url(),
-        quantity: 2
-    },
-    {
-        _id: "3",
-        name: "Product sucess",
-        price: 300,
-        stock: 30,
-        photo: faker.image.url(),
-        quantity: 3
-    },
-    {
-        _id: "4",
-        name: "Product 4",
-        price: 400,
-        stock: 40,
-        photo: faker.image.url(),
-        quantity: 4
-    },
-    {
-        _id: "5",
-        name: "Product 5",
-        price: 500,
-        stock: 50,
-        photo: faker.image.url(),
-        quantity: 5
-    }
-
-];
 
 
 
@@ -58,11 +15,11 @@ const cartItems = [
 
 const Cart = () => {
 
-    const subtotal = 100;
-    const shippingCharges = 50;
-    const tax = 30;
-    const discount = 20;
-    const total = subtotal + shippingCharges + tax - discount;
+    const dispatch = useDispatch();
+
+    const {cartItems, subtotal, shippingCharges, tax, discount, total} = useSelector((state: {cartSlice: ICartReducerInitialState}) => state.cartSlice);
+
+
     const [couponCode, setCouponCode] = useState<string>("");
     const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
 
@@ -77,7 +34,26 @@ const Cart = () => {
             clearTimeout(timer)
             setIsValidCouponCode(false)
         }
-    }, [couponCode])
+    }, [couponCode]);
+
+    useEffect(()=>{
+        dispatch(calculatePrice());
+    },[dispatch, cartItems])
+
+    const incrementHandler = (cartItem: TCartItem) => {
+        if(cartItem.quantity >= cartItem.stock){
+            toast.error(`${cartItem.name} Limited Stock`);
+            return;
+        }
+        dispatch(incrementCartItem(cartItem.productId));
+    }
+    const decrementHandler = (cartItem: TCartItem) => {
+        dispatch(decrementCartItem(cartItem.productId));
+    }
+
+    const removeHandler = (productId: string) => {
+        dispatch(deleteFromCart(productId));
+    }
 
 
     return (
@@ -89,9 +65,9 @@ const Cart = () => {
                 {cartItems.length > 0 ? (
                     cartItems.map((i, idx) => (
                         <CartItemCard
-                            incrementHandler={() => { }}
-                            decrementHandler={() => { }}
-                            removeHandler={() => { }}
+                            incrementHandler={incrementHandler}
+                            decrementHandler={decrementHandler}
+                            removeHandler={removeHandler}
                             key={idx}
                             cartItem={i}
                         />

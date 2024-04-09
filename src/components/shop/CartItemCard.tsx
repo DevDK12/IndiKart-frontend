@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
+import { TCartItem } from "../../Types/cart-types";
+import { server } from "../../redux/api/productApi";
 
 
 
 
 type CartItemProps = {
-    cartItem: CartItem;
-    incrementHandler: (cartItem: CartItem) => void;
-    decrementHandler: (cartItem: CartItem) => void;
-    removeHandler: (id: string) => void;
+    cartItem: TCartItem;
+    incrementHandler: (cartItem: TCartItem) => void;
+    decrementHandler: (cartItem: TCartItem) => void;
+    removeHandler: (productId: string) => void;
 };
 
 const CartItemCard = ({
@@ -23,7 +25,7 @@ const CartItemCard = ({
 
     return (
         <div className="bg-primary-200 grid lg:gap-4 grid-cols-5 grid-rows-2 lg:grid-cols-9 rounded-md">
-            <img className="rounded-l-md w-36 h-36  col-span-2 row-span-2 " src={`${photo}`} alt={name} />
+            <img className="rounded-l-md w-36 h-36  col-span-2 row-span-2 " src={`${server}/${photo}`} alt={name} />
 
             <article className="col-start-3 col-span-3 lg:col-span-5 lg:row-span-2 flex flex-col lg:gap-4 justify-center">
                 <Link className="text-xl xs:text-2xl font-thin" to={`/product/${productId}`}>{name}</Link>
