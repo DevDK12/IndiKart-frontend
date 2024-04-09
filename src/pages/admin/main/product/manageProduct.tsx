@@ -1,31 +1,60 @@
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Input from "../../../../components/ui/Input";
 import { FaTrash } from "react-icons/fa";
+import { server, useDeleteProductMutation, useSingleProductQuery, useUpdateProductMutation } from "../../../../redux/api/productApi";
+import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 
 
 
 
-const img = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=804";
 
 
 
 
 const ManageProduct = () => {
 
-    const price =  2000;
-    const stock =  10;
-    const name =  "PumaShoes";
-    const photo =  img;
-    const category =  "footwear";
+    const navigate = useNavigate();
+    const {productId} = useParams<{productId: string}>();
 
-    const [priceUpdate, setPriceUpdate] = useState<number>(price);
-    const [stockUpdate, setStockUpdate] = useState<number>(stock);
-    const [nameUpdate, setNameUpdate] = useState<string>(name);
-    const [categoryUpdate, setCategoryUpdate] = useState<string>(category);
-    const [photoUpdate, setPhotoUpdate] = useState<string>(photo);
+
+    const [updateProduct] = useUpdateProductMutation();
+    const [deleteProduct] = useDeleteProductMutation();
+
+    const { data, isSuccess, isError, isLoading, error } = useSingleProductQuery(productId!);
+
+    const {price, stock, name, photo} = data?.data?.product || {
+        price: 0,
+        stock: 0,
+        name: '',
+        photo: '',
+    }
+
+    const [productData, setProductData] = useState({
+        price: 0,
+        stock: 0,
+        name: '',
+        photo: '',
+        category: '',
+    })
+
+
     const [photoFile, setPhotoFile] = useState<File>();
+
+
+
+
+    useEffect(()=>{
+        if(isSuccess && data.data.product){
+            setProductData(({
+                ...data.data.product,
+                photo: "",
+            }));
+        }
+    }, [data, isSuccess]);
+
 
 
 
@@ -38,7 +67,11 @@ const ManageProduct = () => {
             reader.readAsDataURL(file);
             reader.onloadend = () => {
                 if (typeof reader.result === "string") {
-                    setPhotoUpdate(reader.result);
+                    // setPhotoUpdate(reader.result);
+                    setProductData(state => ({
+                        ...state,
+                        photo: reader.result as string,
+                    }));
                     setPhotoFile(file);
                 }
             };
@@ -46,21 +79,76 @@ const ManageProduct = () => {
     };
 
 
-    const submitHandler = (e: FormEvent<HTMLFormElement>): void => {
+    const deleteProductHandler = async () => {
+        try{
+            const res = await deleteProduct(productId!);
+            if('error' in res){
+                throw new Error(res.error.data.message);
+            }
+
+            const { status, message } = res.data;
+            if(status === 'success'){
+                toast.success(message);
+                navigate('/admin/product');
+            }
+        }
+        catch(e){
+            toast.error(e.message);
+        }
+    }
+
+
+    const submitHandler = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
-        setNameUpdate(nameUpdate);
-        setPriceUpdate(priceUpdate);
-        setStockUpdate(stockUpdate);
-        setPhotoUpdate(photoUpdate);
+
+        if(!productData.price || !productData.stock || !productData.name || !productData.category){
+            toast.error("Please fill all fields");
+            return;
+        }
+
+
+        const formData = new FormData();
+        formData.append("price", String(productData.price));
+        formData.append("stock", String(productData.stock));
+        formData.append("name", productData.name);
+        formData.append("category", productData.category);
+        if (photoFile) {
+            formData.append("photo", photoFile);
+        }
+
+        try{
+            const res = await updateProduct({productId: productId!, formData});
+
+            if('error' in res){
+                throw new Error(res.error.data.message);
+            }
+
+            const { status, message } = res.data;
+            if(status === 'success'){
+                toast.success(message);
+                navigate('/admin/product');
+            }
+        }
+        catch(e){
+            toast.error(e.message);
+        }
+
+
     };
 
+    if(isError){
+        toast.error(error.data.message);
+    }
 
     return (
         <section className="main-section flex flex-col gap-4 justify-center mt-8 sm:flex-row">
+            {isLoading && <p>Loading Product Details...</p>}
+            {isError && <p>No response from server</p>}
+            {isSuccess && 
             <article className="main-container py-10 relative bg-primary-100 min-h-[40vh] overflow-y-auto flex flex-col gap-3  sm:min-h-[65vh] md:w-1/3 md:min-h-[85vh] sm:w-1/2 ">
-                <strong className="font-semibold text-white/50">ID - fsdfsfsggfgdf</strong>
+                <strong className="font-semibold text-white/50">ID - {productId}</strong>
                 <div className="h-5/6 bg-blue-400 rounded-md">
-                    <img className="w-full h-full object-cover rounded-md" src={photo} alt="Product" />
+                    <img className="w-full h-full object-cover rounded-md" src={`${server}/${photo}`} alt="Product" />
                 </div>
                 <p className="mx-auto uppercase tracking-widest">{name}</p>
                 {stock > 0 ? (
@@ -70,10 +158,14 @@ const ManageProduct = () => {
                 )}
                 <h3 className="mx-auto font-extrabold text-2xl">₹{price}</h3>
             </article>
-
-
+}
+            
+            {isSuccess && 
             <article className="main-container py-6 bg-primary-100 relative" >
-                <button className="absolute text-red-500 top-4 right-4">
+                <button 
+                    className="absolute text-red-500 top-4 right-4"
+                    onClick={deleteProductHandler}
+                >
                     <FaTrash />
                 </button>
                 <form onSubmit={submitHandler}
@@ -85,32 +177,32 @@ const ManageProduct = () => {
                         label="Name"
                         type="text"
                         placeholder="Name"
-                        value={nameUpdate}
-                        onChange={(e) => setNameUpdate(e.target.value)}
+                        value={productData.name}
+                        onChange={(e) => setProductData(state => ({...state, name: e.target.value}))}
                     />
 
                     <Input
                         label="Price"
                         type="number"
                         placeholder="Price"
-                        value={priceUpdate}
-                        onChange={(e) => setPriceUpdate(Number(e.target.value))}
+                        value={productData.price}
+                        onChange={(e) => setProductData(state => ({...state, price: Number(e.target.value)}))}
                     />
 
                     <Input
                         label="Stock"
                         type="number"
                         placeholder="Stock"
-                        value={stockUpdate}
-                        onChange={(e) => setStockUpdate(Number(e.target.value))}
+                        value={productData.stock}
+                        onChange={(e) => setProductData(state => ({...state, stock: Number(e.target.value)}))}
                     />
 
                     <Input
                         label="Category"
                         type="text"
                         placeholder="eg. laptop, camera etc"
-                        value={categoryUpdate}
-                        onChange={(e) => setCategoryUpdate(e.target.value)}
+                        value={productData.category}
+                        onChange={(e) => setProductData(state => ({...state, category: e.target.value}))}
                     />
 
                     <Input
@@ -120,10 +212,11 @@ const ManageProduct = () => {
                     />
 
 
-                    {photoUpdate && <img className="w-36 rounded-md mx-auto" src={photoUpdate} alt="New Image" />}
+                    {productData.photo && <img className="w-36 rounded-md mx-auto" src={productData.photo} alt="New Image" />}
                     <button className="bg-cyan-400 w-1/3 rounded-md font-semibold px-3 py-1 mx-auto" type="submit">Update</button>
                 </form>
             </article>
+}
         </section>
     );
 };

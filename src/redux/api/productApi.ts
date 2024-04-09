@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CategoriesResponse, MesssageResponse, ProductsRequest, ProductsResponse, SearchProductsRequest, SearchProductsResponse } from "../../Types/apiTypes";
+import { CategoriesResponse, MesssageResponse, ProductsRequest, ProductsResponse, SearchProductsRequest, SearchProductsResponse, SingleProductRequest, UpdateProductRequest } from "../../Types/apiTypes";
 
 
-const server = import.meta.env.VITE_SERVER;
+export const server = import.meta.env.VITE_SERVER;
 
 export const productApi = createApi({
     reducerPath: 'productApi',
     baseQuery: fetchBaseQuery({ baseUrl: `${server}/api/v1/product` }),
-    tagTypes: ['products'],
+    tagTypes: ['products', 'product'],
     endpoints: (builder) => ({
         latestProducts: builder.query<ProductsResponse, ProductsRequest>({
             query: ({productsPerPage}) => `latest?product_per_page=${productsPerPage}`,
@@ -45,8 +45,36 @@ export const productApi = createApi({
                 }
             },
             invalidatesTags: ['products'],
-        })
-    })
+        }),
+
+        singleProduct: builder.query<SingleProductRequest, string>({
+            query: (productId) => productId,
+            providesTags: ['products'],
+        }),
+
+        updateProduct: builder.mutation<MesssageResponse, UpdateProductRequest>({
+            //_ Also include userId to verify authority to update
+            query: ({formData, productId}) => {
+                return {
+                    url: productId,
+                    method: 'PUT',
+                    body: formData
+                }
+            },
+            invalidatesTags: ['products', 'product'],
+        }),
+
+        deleteProduct: builder.mutation<MesssageResponse, string>({
+            //_ Also include userId to verify authority to delete
+            query: (productId) => {
+                return {
+                    url: productId,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: ['products'],
+        }),
+    }),
 })
 
 
@@ -59,4 +87,7 @@ export const {
     useSearchProductsQuery,
     useCategoriesQuery,
     useCreateProductMutation,
+    useSingleProductQuery,
+    useUpdateProductMutation,
+    useDeleteProductMutation,
 } = productApi;

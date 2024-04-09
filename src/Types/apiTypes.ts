@@ -74,3 +74,17 @@ export type SearchProductsRequest = {
     category: string,
     productsPerPage: number,
 }
+
+export type SingleProductRequest = {
+    status: string,
+    data: {
+        product: TProduct,
+    }
+}
+
+
+export type UpdateProductRequest = {
+    formData: FormData,
+    productId: string,
+}
+

@@ -130,7 +130,7 @@ const App = () => {
 
         {/* Management */}
         <Route path="/admin/product/new" element={adminOnly ? <NewProduct /> : <Navigate to='/' />} />
-        <Route path="/admin/product/:id" element={adminOnly ? <ManageProduct /> : <Navigate to='/' />} />
+        <Route path="/admin/product/:productId" element={adminOnly ? <ManageProduct /> : <Navigate to='/' />} />
         <Route path="/admin/transaction/:id" element={adminOnly ? <ManageTransaction /> : <Navigate to='/' />} />
       </Route>
     </Routes>
