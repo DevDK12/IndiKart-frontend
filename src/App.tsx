@@ -43,6 +43,7 @@ import { loginUser, logoutUser } from './redux/reducer/user-slice';
 import { getSingleUser } from './redux/api/userApi';
 import toast from 'react-hot-toast';
 import { IUserReducerInitialState } from './Types/user-types';
+import { ICartReducerInitialState } from './Types/cart-types';
 
 
 
@@ -54,6 +55,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const { loading: userLoaidng, user } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
+  const {cartItems} = useSelector((state: {cartSlice: ICartReducerInitialState}) => state.cartSlice);
 
   useEffect(() => {
     const auth = getAuth();
@@ -87,6 +89,7 @@ const App = () => {
 
   const isLoggedIn = user ? true : false;
   const adminOnly = isLoggedIn && user?.role === 'admin';
+  const isCartEmpty = cartItems.length === 0;
 
 
   if (userLoaidng)
@@ -103,9 +106,9 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/shipping" element={<Shipping />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/order/:id" element={<OrderDetail />} />
+        <Route path="/shipping" element={!isCartEmpty ? <Shipping /> : <Navigate to='/cart' />} />
+        <Route path="/orders" element={isLoggedIn ? <Orders /> : <Navigate to='/login' />} />
+        <Route path="/order/:id" element={isLoggedIn ? <OrderDetail /> : <Navigate to='/login' />} />
       </Route>
 
 
