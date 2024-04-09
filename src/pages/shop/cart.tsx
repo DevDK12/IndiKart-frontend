@@ -4,10 +4,9 @@ import CartItemCard from "../../components/shop/CartItemCard";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICartReducerInitialState, TCartItem } from "../../Types/cart-types";
-import { calculatePrice, decrementCartItem, deleteFromCart, incrementCartItem } from "../../redux/reducer/cart-slice";
+import { applyDiscount, calculatePrice, decrementCartItem, deleteFromCart, incrementCartItem } from "../../redux/reducer/cart-slice";
 import toast from "react-hot-toast";
-
-
+import { server } from "../../redux/api/productApi";
 
 
 
@@ -24,18 +23,40 @@ const Cart = () => {
     const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
 
 
+    //_ Using De-Bouncing effect 
+    
     useEffect(() => {
-        const timer = setTimeout(() => {
-            if (Math.random() > 0.5) setIsValidCouponCode(true);
-            else setIsValidCouponCode(false);
-        })
+        const abortController = new AbortController();
+        const signal = abortController.signal;
 
+        const timer = setTimeout(async () => {
+            try {
+                const res = await fetch(`${server}/api/v1/payment/discount?coupon=${couponCode}`, {signal});
+                const couponData = await res.json();
+
+                if (res.status !== 200 || couponData.status === 'error') throw new Error(couponData.message);
+
+                const {discount} = couponData.data;
+
+                setIsValidCouponCode(true);
+                dispatch(applyDiscount(discount));
+            } 
+            catch (err) {
+                setIsValidCouponCode(false);
+            }
+        }, 500);
         return () => {
-            clearTimeout(timer)
-            setIsValidCouponCode(false)
+            abortController.abort(); //_ Abort fetch request
+            setIsValidCouponCode(false);
+            dispatch(applyDiscount(0));
+            clearTimeout(timer);
         }
-    }, [couponCode]);
+    }, [couponCode, dispatch]);
 
+
+
+
+    
     useEffect(()=>{
         dispatch(calculatePrice());
     },[dispatch, cartItems])

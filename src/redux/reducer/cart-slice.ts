@@ -71,9 +71,14 @@ export const cartSlice = createSlice({
             state.tax = Math.round(state.subtotal * 0.18);
             state.shippingCharges = subtotal > 1000 ? 0 : 200;
             state.total = state.subtotal + state.tax + state.shippingCharges - state.discount;
+        },
+
+        applyDiscount(state, action: PayloadAction<number>) {
+            state.discount = action.payload;
+            state.total = state.subtotal + state.tax + state.shippingCharges - state.discount;
         }
     }
 });
 
 
-export const {addToCart, deleteFromCart, clearCart, incrementCartItem, decrementCartItem, calculatePrice} = cartSlice.actions;
+export const {addToCart, deleteFromCart, clearCart, incrementCartItem, decrementCartItem, calculatePrice, applyDiscount} = cartSlice.actions;
