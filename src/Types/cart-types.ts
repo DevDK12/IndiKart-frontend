@@ -12,7 +12,8 @@ export  type TCartItem = {
 export type TAddress = {
     address: string,
     city: string,
-    postalCode: string,
+    state: string,
+    pinCode: string,
     country: string,
 }
 

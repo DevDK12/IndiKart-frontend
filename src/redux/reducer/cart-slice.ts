@@ -14,8 +14,9 @@ const initialState : ICartReducerInitialState = {
     shippingInfo: {
         address: "",
         city: "",
+        state: "",
         country: "",
-        postalCode: "",
+        pinCode: "",
     }
 };
 
@@ -60,7 +61,7 @@ export const cartSlice = createSlice({
         },
         clearCart(state) {
             state.loading = true;
-            state.cartItems = [];
+            state = initialState;
             state.loading = false;
         },
 

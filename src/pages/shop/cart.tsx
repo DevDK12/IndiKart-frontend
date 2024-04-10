@@ -29,6 +29,8 @@ const Cart = () => {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
+        if(couponCode === "") return setIsValidCouponCode(false);
+
         const timer = setTimeout(async () => {
             try {
                 const res = await fetch(`${server}/api/v1/payment/discount?coupon=${couponCode}`, {signal});
