@@ -108,7 +108,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/shipping" element={!isCartEmpty ? <Shipping /> : <Navigate to='/cart' />} />
         <Route path="/orders" element={isLoggedIn ? <Orders /> : <Navigate to='/login' />} />
-        <Route path="/order/:id" element={isLoggedIn ? <OrderDetail /> : <Navigate to='/login' />} />
+        <Route path="/order/:orderId" element={isLoggedIn ? <OrderDetail /> : <Navigate to='/login' />} />
       </Route>
 
 
@@ -134,7 +134,7 @@ const App = () => {
         {/* Management */}
         <Route path="/admin/product/new" element={adminOnly ? <NewProduct /> : <Navigate to='/' />} />
         <Route path="/admin/product/:productId" element={adminOnly ? <ManageProduct /> : <Navigate to='/' />} />
-        <Route path="/admin/transaction/:id" element={adminOnly ? <ManageTransaction /> : <Navigate to='/' />} />
+        <Route path="/admin/transaction/:orderId" element={adminOnly ? <ManageTransaction /> : <Navigate to='/' />} />
       </Route>
     </Routes>
   )
