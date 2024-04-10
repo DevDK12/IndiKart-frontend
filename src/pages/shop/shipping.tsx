@@ -1,7 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import Input from "../../components/ui/Input";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { TAddress } from "../../Types/cart-types";
+import toast from "react-hot-toast";
+import { PaymentIntentResponse } from "../../Types/apiTypes";
+import { server } from "../../redux/api/productApi";
+import { useDispatch } from "react-redux";
+import { saveShippingInfo } from "../../redux/reducer/cart-slice";
 
 
 
@@ -11,8 +17,18 @@ import { useNavigate } from "react-router-dom";
 const Shipping = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {search} = useLocation();
+    const queryParams = new URLSearchParams(search);
+    const totalAmount = queryParams.get("totalAmount");
 
-    const [shippingInfo, setShippingInfo] = useState({
+
+
+
+
+
+
+    const [shippingInfo, setShippingInfo] = useState<TAddress>({
         address: "",
         city: "",
         state: "",
@@ -20,14 +36,50 @@ const Shipping = () => {
         pinCode: "",
     });
 
-    const changeHandler = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setShippingInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    };
+    const addressChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setShippingInfo((prev) => ({ ...prev, address: e.target.value }));
+    const cityChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setShippingInfo((prev) => ({ ...prev, city: e.target.value }));
+    const stateChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setShippingInfo((prev) => ({ ...prev, state: e.target.value }));
+    const countryChangeHandler = (e: ChangeEvent<HTMLSelectElement>) => setShippingInfo((prev) => ({ ...prev, country: e.target.value }));
+    const pinChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setShippingInfo((prev) => ({ ...prev, pinCode: e.target.value }));
 
 
     const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+
+        if(!shippingInfo.address || !shippingInfo.city || !shippingInfo.state || !shippingInfo.country || !shippingInfo.pinCode){
+            toast.error("Please fill all the fields");
+            return;
+        }
+        dispatch(saveShippingInfo(shippingInfo));
+
+        try{
+            const res = await fetch(`${server}/api/v1/payment/create`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    amount: totalAmount,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const resData: PaymentIntentResponse = await res.json();
+
+            const { status } = resData;
+
+            if (status === "error") {
+                //_ Customise the error to contain original error from server 
+                //* By creating original error type in api types (Later)
+                throw new Error("Payment Gateway is not ready");
+            }
+
+            toast.success("Payment Gateway is ready");
+            const { data: clientSecret } = resData;
+            navigate("/checkout", { state:  clientSecret });
+        }
+        catch (err) {
+            toast.error((err as Error).message);
+        }
     };
 
 
@@ -54,7 +106,7 @@ const Shipping = () => {
                     placeholder="Address"
                     label="Address"
                     value={shippingInfo.address}
-                    onChange={changeHandler}
+                    onChange={addressChangeHandler}
                 />
 
                 <Input
@@ -62,7 +114,7 @@ const Shipping = () => {
                     placeholder="City"
                     label="City"
                     value={shippingInfo.city}
-                    onChange={changeHandler}
+                    onChange={cityChangeHandler}
                 />
 
                 <Input
@@ -70,7 +122,7 @@ const Shipping = () => {
                     placeholder="State"
                     label="State"
                     value={shippingInfo.state}
-                    onChange={changeHandler}
+                    onChange={stateChangeHandler}
                 />
                 <div className="px-4 flex flex-col gap-2 sm:flex-row  sm:justify-between sm:items-center w-full">
                     <label>Country</label>
@@ -79,7 +131,7 @@ const Shipping = () => {
                         name="country"
                         required
                         value={shippingInfo.country}
-                        onChange={changeHandler}
+                        onChange={countryChangeHandler}
                     >
                         <option value="">Choose Country</option>
                         <option value="india">India</option>
@@ -91,13 +143,14 @@ const Shipping = () => {
                     placeholder="Pin Code"
                     label="PinCode"
                     value={shippingInfo.pinCode}
-                    onChange={changeHandler}
+                    onChange={pinChangeHandler}
                 />
 
-                <button className="bg-cyan-400 px-3 py-2 rounded-md w-full sm:w-1/2" type="submit">Pay Now</button>
+                <button className="bg-cyan-400 px-3 py-2 rounded-md w-full sm:w-1/2" type="submit">Check out</button>
             </form>
         </div>
     );
 };
 
 export default Shipping;
+

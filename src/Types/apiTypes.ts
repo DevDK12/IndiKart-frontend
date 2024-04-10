@@ -1,3 +1,5 @@
+import { ICartReducerInitialState } from "./cart-types"
+import { TOrder, TOrderItem } from "./order-types"
 import { TProduct } from "./product-types"
 import { TUser } from "./user-types"
 
@@ -88,3 +90,36 @@ export type UpdateProductRequest = {
     productId: string,
 }
 
+
+
+
+
+export type CreateOrderRequest = Omit<ICartReducerInitialState, 'loading' | 'cartItems'> & {
+    user: string,
+    orderItems: TOrderItem[],
+}
+
+
+export type OrdersResponse = {
+    status: string,
+    data: {
+        orders: TOrder[]
+    }
+}
+
+
+export type OrderDetailResponse = {
+    status: string,
+    data: {
+        order: TOrder,
+    }
+}
+
+
+
+export type PaymentIntentResponse = {
+    status: string,
+    data: {
+        clientSecret: string,
+    }
+}

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICartReducerInitialState, TCartItem } from "../../Types/cart-types";
+import { ICartReducerInitialState, TAddress, TCartItem } from "../../Types/cart-types";
 
 
 
@@ -60,9 +60,7 @@ export const cartSlice = createSlice({
             state.loading = false;
         },
         clearCart(state) {
-            state.loading = true;
             state = initialState;
-            state.loading = false;
         },
 
         calculatePrice(state) {
@@ -77,9 +75,13 @@ export const cartSlice = createSlice({
         applyDiscount(state, action: PayloadAction<number>) {
             state.discount = action.payload;
             state.total = state.subtotal + state.tax + state.shippingCharges - state.discount;
+        },
+
+        saveShippingInfo(state, action: PayloadAction<TAddress>) {
+            state.shippingInfo = action.payload;
         }
     }
 });
 
 
-export const {addToCart, deleteFromCart, clearCart, incrementCartItem, decrementCartItem, calculatePrice, applyDiscount} = cartSlice.actions;
+export const {addToCart, deleteFromCart, clearCart, incrementCartItem, decrementCartItem, calculatePrice, applyDiscount, saveShippingInfo} = cartSlice.actions;

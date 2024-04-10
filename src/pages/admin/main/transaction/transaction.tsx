@@ -1,7 +1,9 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import TableHOC from "../../../../components/ui/TableHOC";
+import { useAllOrdersQuery } from "../../../../redux/api/orderApi";
+import toast from "react-hot-toast";
 
 
 
@@ -15,38 +17,6 @@ interface DataType {
     action: ReactElement;
 }
 
-
-
-
-const arr: Array<DataType> = [
-    {
-        user: "Charas",
-        amount: 4500,
-        discount: 400,
-        status: <span className="text-red-500 font-semibold">Processing</span>,
-        quantity: 3,
-        action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold" to="/admin/transaction/sajknaskd">Manage</Link >,
-    },
-
-    {
-        user: "Xavirors",
-        amount: 6999,
-        discount: 400,
-        status: <span className="text-green-500 font-semibold">Shipped</span>,
-        quantity: 6,
-        action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold" to="/admin/transaction/sajknaskd">Manage</Link >,
-    },
-
-    {
-        user: "Xavirors",
-        amount: 6999,
-        discount: 400,
-        status: <span className="text-purple-500 font-semibold">Delivered</span>,
-        quantity: 6,
-        action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold" to="/admin/transaction/sajknaskd">Manage</Link >,
-    },
-
-];
 
 
 
@@ -82,7 +52,30 @@ const columns: Column<DataType>[] = [
 
 
 const Transaction = () => {
-    const [rows, setRows] = useState<DataType[]>(arr);
+
+    const {data, isError, isLoading, isSuccess, error} = useAllOrdersQuery();
+
+
+    const [rows, setRows] = useState<DataType[]>([]);
+
+
+    //_ order discount is not fetched properly
+    //_ Same with order quantity 
+
+    useEffect(()=>{
+        if(isSuccess && data?.data?.orders){
+            setRows(data.data.orders.map(order => ({
+                user: order.user.email,
+                amount: Number(order.total),
+                discount: Number(order.discount),
+                quantity: Number(order.orderItems.length),
+                status: <span className={`text-${order.status === "processing" ? "red" : order.status === "shipped" ? "green" : "purple"}-500 font-semibold`}>{order.status}</span>,
+                action: <Link className="bg-cyan-400 text-white px-4 py-2 rounded-lg font-semibold" to={`/admin/transaction/${order._id}`}>Manage</Link >,
+            })));
+        }
+    },[data, isSuccess]);
+
+
 
     const Table = TableHOC<DataType>(
         columns,
@@ -91,12 +84,19 @@ const Transaction = () => {
         "Transactions",
         rows.length > 8,
         8
-    );
+    )();
 
+
+    if(isError){
+        toast.error((error as Error).message);
+    }
 
     return (
         <div className="main-section">
-            {Table()}
+            {isLoading && <p>Loading Transactions...</p>}
+            {isSuccess && 
+                Table
+            }
         </div>
     );
 };

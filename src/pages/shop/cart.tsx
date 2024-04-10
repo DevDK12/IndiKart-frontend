@@ -130,7 +130,7 @@ const Cart = () => {
                         </span>
                     ))}
 
-                {cartItems.length > 0 && <Link className="bg-cyan-400 font-semibold px-3 py-2 rounded-md text-center" to="/shipping">Checkout</Link>}
+                {cartItems.length > 0 && <Link className="bg-cyan-400 font-semibold px-3 py-2 rounded-md text-center" to={`/shipping?totalAmount=${total}`}>Checkout</Link>}
             </aside>
         </div>
     );

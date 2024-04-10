@@ -2,6 +2,10 @@ import { ReactElement, useEffect, useState } from "react";
 import TableHOC from "../../components/ui/TableHOC"
 import { Column } from "react-table";
 import { Link } from "react-router-dom";
+import { useMyOrdersQuery } from "../../redux/api/orderApi";
+import toast from "react-hot-toast";
+import { IUserReducerInitialState } from "../../Types/user-types";
+import { useSelector } from "react-redux";
 
 
 
@@ -46,43 +50,35 @@ const column: Column<DataType>[] = [
 
 const Orders = () => {
 
+    const {user} = useSelector((state: {userSlice: IUserReducerInitialState}) => state.userSlice);
 
     const [rows, setRows] = useState<DataType[]>([]);
 
+    const {data, isError, isLoading, isSuccess, error} = useMyOrdersQuery(user?._id as string);
 
-    useEffect(() => {
-        setRows([
-            {
-                _id: "12",
-                amount: 5,
-                discount: 50,
-                quantity: 10,
-                status: (
-                    <span
-                        className="text-red-400"
-                    >
-                        Processing
-                    </span>
-                ),
-                action: <Link className="bg-cyan-400 text-white px-2 py-1 rounded" to={`/order/12`}>View</Link>,
-            },
-            {
-                _id: "12",
-                amount: 5,
-                discount: 50,
-                quantity: 10,
-                status: (
-                    <span
-                        className="text-red-400"
-                    >
-                        Processing
-                    </span>
-                ),
-                action: <Link className="bg-cyan-400 text-white px-2 py-1 rounded" to={`/order/32`}>View</Link>,
-            },
-        ],
-        );
-    }, []);
+
+    //_ order discount is not fetched properly
+    //_ Same with order quantity 
+
+    useEffect(()=>{
+        if(isSuccess){
+            setRows(data.data.orders.map(order => ({
+                _id: order._id,
+                amount: Number(order.total),
+                discount: Number(order.discount),
+                quantity: Number(order.orderItems.length),
+                status: <span className={`text-${order.status === "processing" ? "red" : order.status === "shipped" ? "green" : "purple"}-500 font-semibold`}>{order.status}</span>,
+                action: <Link className="bg-cyan-400 text-white px-2 py-1 rounded" to={`/order/${order._id}`}>View</Link >,
+            })));
+        }
+    },[data, isSuccess]);
+
+
+
+    if(isError){
+        toast.error((error as Error).message);
+    }
+
 
 
     const Table = TableHOC<DataType>(
@@ -92,13 +88,14 @@ const Orders = () => {
         "Orders",
         rows.length > 6,
         6
-    );
+    )();
 
     return (
         <div className="
         h-full px-10 py-5 flex flex-col gap-10
         ">
-            {Table()}
+            {isLoading && <h1>Loading Orders...</h1>}
+            {isSuccess && Table}
         </div>
     )
 }
