@@ -17,6 +17,7 @@ export const orderApi = createApi({
                     body: data
                 }
             },
+            invalidatesTags: ['orders'],
         }),
         myOrders: builder.query<OrdersResponse, string>({
             query: (userId) => `my-orders?userId=${userId}`,

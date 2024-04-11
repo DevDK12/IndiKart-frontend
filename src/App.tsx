@@ -14,6 +14,7 @@ const Cart = lazy(() => import('./pages/shop/cart'));
 const Shipping = lazy(() => import('./pages/shop/shipping'));
 const Orders = lazy(() => import('./pages/shop/orders'));
 const OrderDetail = lazy(() => import('./pages/shop/order_detail'));
+const Checkout = lazy(() => import('./pages/shop/checkout'));
 
 
 const Dashboard = lazy(() => import('./pages/admin/main/dashboard'));
@@ -109,6 +110,7 @@ const App = () => {
         <Route path="/shipping" element={!isCartEmpty ? <Shipping /> : <Navigate to='/cart' />} />
         <Route path="/orders" element={isLoggedIn ? <Orders /> : <Navigate to='/login' />} />
         <Route path="/order/:orderId" element={isLoggedIn ? <OrderDetail /> : <Navigate to='/login' />} />
+        <Route path="/checkout" element={isLoggedIn ? <Checkout /> : <Navigate to='/login' />} />
       </Route>
 
 
