@@ -50,7 +50,6 @@ const Cart = () => {
         return () => {
             abortController.abort(); //_ Abort fetch request
             setIsValidCouponCode(false);
-            dispatch(applyDiscount(0));
             clearTimeout(timer);
         }
     }, [couponCode, dispatch]);

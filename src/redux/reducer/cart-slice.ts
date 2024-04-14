@@ -60,9 +60,8 @@ export const cartSlice = createSlice({
             state.loading = false;
         },
         clearCart(state) {
-            state = initialState;
+            Object.assign(state, initialState);
         },
-
         calculatePrice(state) {
             const subtotal = state.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -75,6 +74,7 @@ export const cartSlice = createSlice({
         applyDiscount(state, action: PayloadAction<number>) {
             state.discount = action.payload;
             state.total = state.subtotal + state.tax + state.shippingCharges - state.discount;
+            state.total = Math.max(state.total, 0);
         },
 
         saveShippingInfo(state, action: PayloadAction<TAddress>) {
