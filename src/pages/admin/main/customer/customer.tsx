@@ -1,7 +1,10 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useCallback, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { Column } from "react-table";
 import TableHOC from "../../../../components/ui/TableHOC";
+import { useAllUsersQuery, useDeleteUserMutation} from "../../../../redux/api/userApi";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface DataType {
     avatar: ReactElement;
@@ -42,41 +45,65 @@ const columns: Column<DataType>[] = [
 
 
 
-const img = "https://randomuser.me/api/portraits/women/54.jpg";
-const img2 = "https://randomuser.me/api/portraits/women/50.jpg";
-
-
-
-
-const arr: Array<DataType> = [
-    {
-        avatar: <img className="w-14 rounded-full" src={img} alt="Shoes" />,
-        name: "Emily Palmer",
-        email: "emily.palmer@example.com",
-        gender: "female",
-        role: "user",
-        action: <button className="text-red-500" > <FaTrash /> </button>
-    },
-
-    {
-        avatar: <img className="w-14 rounded-full" src={img2} alt="Shoes" />,
-        name: "May Scoot",
-        email: "aunt.may@example.com",
-        gender: "female",
-        role: "user",
-        action: <button className="text-red-500" > <FaTrash /> </button>
-    },
-
-
-];
-
-
 
 
 
 
 const Customers = () => {
-    const [rows, setRows] = useState<DataType[]>(arr);
+
+
+    const navigate = useNavigate();
+
+    const [deleteUser] = useDeleteUserMutation();
+
+    const {data, isLoading, error, isError, isSuccess} = useAllUsersQuery();
+
+
+    const [rows, setRows] = useState<DataType[]>([]);
+
+    const deleteUserHandler = useCallback(async (userId: string) => {
+
+        try{
+            const res = await deleteUser(userId);
+
+            if('error' in res ){
+                throw new Error(res.error.message);
+            }
+
+            // delete from firebase also
+
+            navigate("/admin/customer");
+            toast.success(res.data.message);
+        }
+        catch(err){
+            toast.error((err as Error).message);
+        }
+    }, [deleteUser, navigate])
+
+
+
+    useEffect(() => {
+        if(isSuccess && data?.data.users){
+            const users = data.data.users;
+
+            setRows(
+                users.map(user => ({
+                    avatar: <img className="w-14 rounded-full" src={user.image} alt="Shoes" />,
+                    name: user.name,
+                    email: user.email,
+                    gender: user.gender,
+                    role: user.role,
+                    action: <button onClick={()=>deleteUserHandler(user._id)} className="text-red-500" > <FaTrash /> </button>
+                }))
+            );
+        }
+    },[isSuccess, data, deleteUserHandler])
+
+
+    if(isError){
+        toast.error( error?.data.message || 'Error fetching Users');
+    }
+
 
     const Table = TableHOC<DataType>(
         columns,
@@ -85,12 +112,14 @@ const Customers = () => {
         "Customers",
         rows.length > 5,
         5
-    );
+    )();
 
 
     return (
         <div className="main-section">
-            {Table()}
+            {isError && <p>Error fetching users</p>}
+            {isLoading && <p>Loading All users...</p>}
+            {isSuccess && Table}
         </div>
     );
 };

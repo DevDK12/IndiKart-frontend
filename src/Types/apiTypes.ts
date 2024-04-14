@@ -123,3 +123,11 @@ export type PaymentIntentResponse = {
         clientSecret: string,
     }
 }
+
+
+export type AllUserResponse = {
+    status: string,
+    data: {
+        users: TUser[]
+    }
+}
