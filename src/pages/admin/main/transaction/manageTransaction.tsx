@@ -1,10 +1,10 @@
-import ProductCard from "../../../../components/admin/ProductCart";
-import { useDeleteOrderMutation, useOrderDetailQuery, useProcessOrderMutation } from "../../../../redux/api/orderApi";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { ErrorResponse, Navigate, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { TOrder } from "../../../../Types/order-types";
-import { server } from "../../../../redux/api/productApi";
 import { FaTrash } from "react-icons/fa";
+import { TOrder } from "@/Types/order-types";
+import { server } from "@/redux/api/productApi";
+import ProductCard from "@/components/admin/ProductCart";
+import { useDeleteOrderMutation, useOrderDetailQuery, useProcessOrderMutation } from "@/redux/api/orderApi";
 
 
 
@@ -104,7 +104,7 @@ const ManageTransaction = () => {
         try{
             const res = await deleteOrder(orderId!);
 
-            if('error' in res) throw new Error((res.error as Error).message);
+            if('error' in res) throw new Error((res.error as ErrorResponse).data.message);
 
             if(res.data.status === "success"){
                 toast.success(res.data.message);

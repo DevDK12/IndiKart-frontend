@@ -1,5 +1,5 @@
 import { Column } from "react-table";
-import TableHOC from "../ui/TableHOC";
+import TableHOC from "@ui/TableHOC";
 
 
 

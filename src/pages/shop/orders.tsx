@@ -1,11 +1,13 @@
 import { ReactElement, useEffect, useState } from "react";
-import TableHOC from "../../components/ui/TableHOC"
-import { Column } from "react-table";
 import { Link } from "react-router-dom";
+import { Column } from "react-table";
 import { useMyOrdersQuery } from "../../redux/api/orderApi";
-import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import toast from "react-hot-toast";
+
+
+import TableHOC from "@components/ui/TableHOC"
+import { RootState } from "@/redux/store";
 
 
 

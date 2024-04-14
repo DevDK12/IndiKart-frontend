@@ -1,12 +1,12 @@
-import Input from "../../components/ui/Input"
-
-import Products from "../../components/shop/Products";
 import { useMemo, useState } from "react";
-import { useCategoriesQuery, useSearchProductsQuery } from "../../redux/api/productApi";
-import { ErrorResponse } from "react-router-dom";
+import { useMediaQuery } from 'react-responsive';
 import toast from "react-hot-toast";
 
-import { useMediaQuery } from 'react-responsive';
+
+import Input from "@ui/Input"
+import Products from "@components/shop/Products";
+import { useCategoriesQuery, useSearchProductsQuery } from "@api/productApi";
+import { ErrorResponse } from "@/Types/apiTypes";
 
 
 

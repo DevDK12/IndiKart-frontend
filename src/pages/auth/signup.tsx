@@ -1,16 +1,16 @@
 import { FormEvent, useState } from "react";
-import Input from "../../components/ui/Input"
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-
 import { v4 as uuid } from 'uuid';
 import toast from "react-hot-toast";
-import { useRegisterUserMutation } from "../../redux/api/userApi";
-import { IRegisterUserApi } from "../../Types/user-types";
 import { Auth, UserCredential, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
-import { auth } from "../../firebase";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
+
+
+import Input from "@ui/Input"
+import { useRegisterUserMutation } from "@api/userApi";
+import { IRegisterUserApi } from "@/Types/user-types";
+import { auth } from "@/firebase";
+import { ErrorResponse } from "@/Types/apiTypes";
 
 
 
@@ -53,13 +53,7 @@ const Signup = () => {
 
 
             if ('error' in response) {
-                // console.dir(response.error.data)
-                // console.dir(response.error.status)
-                // console.dir(response.error.data.message)
-                // console.dir(response.error.data.stack)
-                // console.dir(response.error.data.status)
-                // throw new Error(response.error.data.message);
-                const error = response.error as FetchBaseQueryError | SerializedError;
+                const error = response.error as ErrorResponse
                 throw new Error(error.data.message);
             }
 
@@ -73,7 +67,7 @@ const Signup = () => {
 
         }
         catch (err) {
-            toast.error(err.message || 'Signup failed');
+            toast.error((err as Error).message || 'Signup failed');
         }
     };
 

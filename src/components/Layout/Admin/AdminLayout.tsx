@@ -2,10 +2,10 @@ import { Suspense, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 
-import Loader from "../../ui/Loader";
-import AdminSidebar from "./AdminSidebar";
+import Loader from "@ui/Loader";
 import { HiMenuAlt4 } from "react-icons/hi";
-import AdminHeader from "../../admin/AdminHeader";
+import AdminSidebar from "./AdminSidebar";
+import AdminHeader from "@components/admin/AdminHeader";
 
 
 

@@ -1,7 +1,8 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "../../components/shop/CheckoutForm";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import CheckoutForm from "@components/shop/CheckoutForm";
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);

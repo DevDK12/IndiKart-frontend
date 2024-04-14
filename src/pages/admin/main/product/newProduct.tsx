@@ -1,19 +1,20 @@
 
 import { ChangeEvent, FormEvent, useState } from "react";
-import Input from "../../../../components/ui/Input";
-import { useCreateProductMutation } from "../../../../redux/api/productApi";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../../../redux/store";
+
+
+import Input from "@ui/Input";
+import { useCreateProductMutation } from "@api/productApi";
+import { RootState } from "@/redux/store";
+import { ErrorResponse } from "@/Types/apiTypes";
 
 
 
 const NewProduct = () => {
 
-    const {user} = useSelector((state: RootState) => state.userSlice);
+    const { user } = useSelector((state: RootState) => state.userSlice);
 
     const navigate = useNavigate();
 
@@ -46,10 +47,10 @@ const NewProduct = () => {
     };
 
 
-    const submitHandler = async (e : FormEvent<HTMLFormElement>) => {
+    const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
-        if(!name || !category || !price || !stock || !photo)    return;
+
+        if (!name || !category || !price || !stock || !photo) return;
 
         const formData = new FormData();
         formData.append('user', user?._id as string);
@@ -57,14 +58,15 @@ const NewProduct = () => {
         formData.append("price", String(price));
         formData.append("stock", String(stock));
         formData.append("category", category);
-        if(photo) formData.append("photo", photo);
+        if (photo) formData.append("photo", photo);
 
-        try{
+        try {
             const res = await createProduct(formData);
 
 
-            if('error' in res){
-                const error = res.error as FetchBaseQueryError | SerializedError;
+            if ('error' in res) {
+                // const error = res.error as FetchBaseQueryError | SerializedError;
+                const error = res.error as ErrorResponse;
                 throw new Error(error.data.message);
             }
 
@@ -74,8 +76,8 @@ const NewProduct = () => {
                 navigate('/admin/product');
             }
         }
-        catch(err ){
-            toast.error(err.message || 'Error creating product');
+        catch (err) {
+            toast.error((err as Error).message || 'Error creating product');
         }
 
     }

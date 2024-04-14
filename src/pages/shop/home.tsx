@@ -1,9 +1,11 @@
-import { ErrorResponse, Link } from "react-router-dom";
-import { useLatestProductsQuery } from '../../redux/api/productApi';
-import Products from "../../components/shop/Products";
-import toast from "react-hot-toast";
 import { useMemo } from "react";
+import toast from "react-hot-toast";
+import { ErrorResponse, Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+
+
+import { useLatestProductsQuery } from '@api/productApi';
+import Products from "@components/shop/Products";
 
 
 
@@ -25,11 +27,13 @@ const Home = () => {
     const { data, isError, isLoading, isSuccess, error } = useLatestProductsQuery({ productsPerPage });
 
 
-    let products;
     if (isError) {
         const err = error as ErrorResponse;
         toast.error(err?.data?.message || 'No response from server');
     }
+    
+    
+    let products;
     if (isLoading) {
         products = <p>Loading...</p>
     }

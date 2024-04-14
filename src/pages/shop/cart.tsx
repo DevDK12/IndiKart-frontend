@@ -1,13 +1,15 @@
-import { VscError } from "react-icons/vsc";
-import { Link } from "react-router-dom";
-import CartItemCard from "../../components/shop/CartItemCard";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TCartItem } from "../../Types/cart-types";
-import { applyDiscount, calculatePrice, decrementCartItem, deleteFromCart, incrementCartItem } from "../../redux/reducer/cart-slice";
+import { VscError } from "react-icons/vsc";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { server } from "../../redux/api/productApi";
-import { RootState } from "../../redux/store";
+
+
+import CartItemCard from "@components/shop/CartItemCard";
+import { TCartItem } from "@/Types/cart-types";
+import { applyDiscount, calculatePrice, decrementCartItem, deleteFromCart, incrementCartItem } from "@/redux/reducer/cart-slice";
+import { server } from "@api/productApi";
+import { RootState } from "@/redux/store";
 
 
 

@@ -1,5 +1,5 @@
+import { OrderItemType } from "@/Types/types";
 import { Link } from "react-router-dom";
-import { OrderItemType } from "../../Types/types";
 
 
 const ProductCard = ({

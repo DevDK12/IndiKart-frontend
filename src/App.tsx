@@ -1,11 +1,20 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { lazy, Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import toast from 'react-hot-toast';
+
+
+import Login from './pages/auth/login';
+import Signup from './pages/auth/signup';
+import { loginUser, logoutUser } from './redux/reducer/user-slice';
+import { getSingleUser } from './redux/api/userApi';
+import Loader from './components/ui/Loader';
+import { RootState } from './redux/store';
 
 
 import Layout from './components/Layout/Layout';
 import AdminLayout from './components/Layout/Admin/AdminLayout';
-
-
 
 const NotFound = lazy(() => import('./pages/notfound'));
 
@@ -37,15 +46,7 @@ const ManageProduct = lazy(() => import('./pages/admin/main/product/manageProduc
 const ManageTransaction = lazy(() => import('./pages/admin/main/transaction/manageTransaction'));
 
 
-import Login from './pages/auth/login';
-import Signup from './pages/auth/signup';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { loginUser, logoutUser } from './redux/reducer/user-slice';
-import { getSingleUser } from './redux/api/userApi';
-import toast from 'react-hot-toast';
-import Loader from './components/ui/Loader';
-import { RootState } from './redux/store';
+
 
 
 

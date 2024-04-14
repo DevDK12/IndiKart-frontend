@@ -1,13 +1,15 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import Input from "../../components/ui/Input";
 import { useLocation, useNavigate } from "react-router-dom";
-import { TAddress } from "../../Types/cart-types";
-import toast from "react-hot-toast";
-import { PaymentIntentResponse } from "../../Types/apiTypes";
-import { server } from "../../redux/api/productApi";
 import { useDispatch } from "react-redux";
-import { saveShippingInfo } from "../../redux/reducer/cart-slice";
+import toast from "react-hot-toast";
+
+
+import Input from "@ui/Input";
+import { TAddress } from "@/Types/cart-types";
+import { PaymentIntentResponse } from "@/Types/apiTypes";
+import { server } from "@api/productApi";
+import { saveShippingInfo } from "@/redux/reducer/cart-slice";
 
 
 

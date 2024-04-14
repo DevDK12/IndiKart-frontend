@@ -1,4 +1,4 @@
-import { SidebarItemType } from "../../../Types/MenuItemTypes"
+import { SidebarItemType } from "@/Types/MenuItemTypes"
 import SidebarItem from "./SidebarItem"
 
 

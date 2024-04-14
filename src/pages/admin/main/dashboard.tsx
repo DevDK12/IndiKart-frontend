@@ -1,11 +1,13 @@
-import WidgetItem from "../../../components/admin/WidgetItem"
-
-import data from '../../../assets/data.json'
-import CategoryItem from "../../../components/admin/CategoryItem"
-import BarChart from "../../../components/ui/Charts/BarChart"
 import { BiMaleFemale } from "react-icons/bi"
-import DoughnutChart from "../../../components/ui/Charts/DoughnutChart"
-import DashboardTable from "../../../components/admin/DashboardTable"
+
+
+import data from '@assets/data.json'
+
+import WidgetItem from "@components/admin/WidgetItem"
+import CategoryItem from "@components/admin/CategoryItem"
+import BarChart from "@ui/Charts/BarChart"
+import DoughnutChart from "@ui/Charts/DoughnutChart"
+import DashboardTable from "@components/admin/DashboardTable"
 
 
 

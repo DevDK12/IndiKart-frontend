@@ -1,11 +1,11 @@
 
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import Input from "../../../../components/ui/Input";
 import { FaTrash } from "react-icons/fa";
 import { server, useDeleteProductMutation, useSingleProductQuery, useUpdateProductMutation } from "../../../../redux/api/productApi";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { ErrorResponse, Navigate, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
+import Input from "@ui/Input";
 
 
 
@@ -83,7 +83,7 @@ const ManageProduct = () => {
         try{
             const res = await deleteProduct(productId!);
             if('error' in res){
-                throw new Error(res.error.data.message);
+                throw new Error((res.error as ErrorResponse).data.message);
             }
 
             const { status, message } = res.data;
@@ -120,7 +120,7 @@ const ManageProduct = () => {
             const res = await updateProduct({productId: productId!, formData});
 
             if('error' in res){
-                throw new Error(res.error.data.message);
+                throw new Error((res.error as ErrorResponse).data.message);
             }
 
             const { status, message } = res.data;

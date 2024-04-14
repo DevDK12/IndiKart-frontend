@@ -1,9 +1,11 @@
 import { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
-import TableHOC from "../../../../components/ui/TableHOC";
-import { useAllOrdersQuery } from "../../../../redux/api/orderApi";
 import toast from "react-hot-toast";
+
+import TableHOC from "@ui/TableHOC";
+import { useAllOrdersQuery } from "@api/orderApi";
+import { ErrorResponse } from "@/Types/apiTypes";
 
 
 
@@ -88,7 +90,7 @@ const Transaction = () => {
 
 
     if(isError){
-        toast.error((error as Error).message);
+        toast.error((error as ErrorResponse).data.message);
     }
 
     return (

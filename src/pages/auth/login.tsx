@@ -1,15 +1,15 @@
 import { FormEvent, useState } from "react";
-import Input from "../../components/ui/Input"
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-
 import toast from "react-hot-toast";
-import { useLoginUserMutation } from "../../redux/api/userApi";
-import { ILoginUserApi } from "../../Types/user-types";
 import { Auth, UserCredential, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
-import { auth } from "../../firebase";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
+
+
+import Input from "@ui/Input"
+import { useLoginUserMutation } from "@api/userApi";
+import { ILoginUserApi } from "@/Types/user-types";
+import { ErrorResponse } from "@/Types/apiTypes";
+import { auth } from "@/firebase";
 
 
 
@@ -43,7 +43,7 @@ const Login = () => {
 
 
             if ('error' in response) {
-                const error = res.error as FetchBaseQueryError | SerializedError;
+                const error = response.error as ErrorResponse;
                 throw new Error(error.data.message);
             }
 
@@ -56,7 +56,7 @@ const Login = () => {
 
         }
         catch (err) {
-            toast.error(err.message || 'Log in failed');
+            toast.error((err as Error).message || 'Log in failed');
         }
     };
 

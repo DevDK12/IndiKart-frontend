@@ -1,10 +1,12 @@
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { Column } from "react-table";
-import TableHOC from "../../../../components/ui/TableHOC";
-import { useAllUsersQuery, useDeleteUserMutation} from "../../../../redux/api/userApi";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { ErrorResponse, useNavigate } from "react-router-dom";
+
+import TableHOC from "@ui/TableHOC";
+import { useAllUsersQuery, useDeleteUserMutation } from "@api/userApi";
+
 
 interface DataType {
     avatar: ReactElement;
@@ -56,26 +58,26 @@ const Customers = () => {
 
     const [deleteUser] = useDeleteUserMutation();
 
-    const {data, isLoading, error, isError, isSuccess} = useAllUsersQuery();
+    const { data, isLoading, error, isError, isSuccess } = useAllUsersQuery();
 
 
     const [rows, setRows] = useState<DataType[]>([]);
 
     const deleteUserHandler = useCallback(async (userId: string) => {
 
-        try{
+        try {
             const res = await deleteUser(userId);
 
-            if('error' in res ){
-                throw new Error(res.error.message);
+            if ('error' in res) {
+                throw new Error((res.error as ErrorResponse).data.message);
             }
 
-            // delete from firebase also
+            //_ delete from firebase also
 
             navigate("/admin/customer");
             toast.success(res.data.message);
         }
-        catch(err){
+        catch (err) {
             toast.error((err as Error).message);
         }
     }, [deleteUser, navigate])
@@ -83,7 +85,7 @@ const Customers = () => {
 
 
     useEffect(() => {
-        if(isSuccess && data?.data.users){
+        if (isSuccess && data?.data.users) {
             const users = data.data.users;
 
             setRows(
@@ -93,15 +95,15 @@ const Customers = () => {
                     email: user.email,
                     gender: user.gender,
                     role: user.role,
-                    action: <button onClick={()=>deleteUserHandler(user._id)} className="text-red-500" > <FaTrash /> </button>
+                    action: <button onClick={() => deleteUserHandler(user._id)} className="text-red-500" > <FaTrash /> </button>
                 }))
             );
         }
-    },[isSuccess, data, deleteUserHandler])
+    }, [isSuccess, data, deleteUserHandler])
 
 
-    if(isError){
-        toast.error( error?.data.message || 'Error fetching Users');
+    if (isError) {
+        toast.error((error as ErrorResponse)?.data.message || 'Error fetching Users');
     }
 
 

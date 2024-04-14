@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
-import Loader from "../ui/Loader";
 import Header from "../shop/Header";
+import Loader from "@ui/Loader";
 
 
 

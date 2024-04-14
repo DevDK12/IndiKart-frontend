@@ -5,7 +5,7 @@ import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
 import { useState } from "react";
 import SidebarList from "./SidebarList";
 import { Link } from "react-router-dom";
-import { admin_items, apps, charts } from "../../../utils/Admin_Menu";
+import { admin_items, apps, charts } from "@utils/Admin_Menu";
 
 
 

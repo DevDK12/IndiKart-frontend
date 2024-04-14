@@ -1,9 +1,9 @@
 import {
     CiBrightnessDown,
-    CiCloudMoon,
+    // CiCloudMoon,
 } from "react-icons/ci";
 import { IoMdNotifications } from "react-icons/io";
-import Avatar from "../ui/Avatar";
+import Avatar from "@ui/Avatar";
 
 
 

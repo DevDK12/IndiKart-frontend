@@ -1,7 +1,7 @@
-import DoughnutChart from "../../../components/ui/Charts/DoughnutChart";
-import PieChart from "../../../components/ui/Charts/PieChart";
+import DoughnutChart from "@ui/Charts/DoughnutChart";
+import PieChart from "@ui/Charts/PieChart";
 
-import data from "../../../assets/data.json";
+import data from '@assets/data.json';
 
 
 

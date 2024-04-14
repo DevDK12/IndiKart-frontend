@@ -1,5 +1,4 @@
-import BarChart from "../../../components/ui/Charts/BarChart";
-import LineChart from "../../../components/ui/Charts/LineChart";
+import LineChart from "@ui/Charts/LineChart";
 
 const months = [
     "January",

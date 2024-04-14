@@ -1,13 +1,14 @@
 import { ReactElement, useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { Column } from "react-table";
-import TableHOC from "../../../../components/ui/TableHOC";
-import { useUserProductsQuery } from "../../../../redux/api/productApi";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { ErrorResponse } from "../../../../Types/apiTypes";
-import { RootState } from "../../../../redux/store";
+import { Column } from "react-table";
+
+import TableHOC from "@components/ui/TableHOC";
+import { useUserProductsQuery } from "@api/productApi";
+import { ErrorResponse } from "@/Types/apiTypes";
+import { RootState } from "@/redux/store";
 
 
 
