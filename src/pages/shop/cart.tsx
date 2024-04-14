@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import CartItemCard from "../../components/shop/CartItemCard";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ICartReducerInitialState, TCartItem } from "../../Types/cart-types";
+import { TCartItem } from "../../Types/cart-types";
 import { applyDiscount, calculatePrice, decrementCartItem, deleteFromCart, incrementCartItem } from "../../redux/reducer/cart-slice";
 import toast from "react-hot-toast";
 import { server } from "../../redux/api/productApi";
+import { RootState } from "../../redux/store";
 
 
 
@@ -16,7 +17,7 @@ const Cart = () => {
 
     const dispatch = useDispatch();
 
-    const {cartItems, subtotal, shippingCharges, tax, discount, total} = useSelector((state: {cartSlice: ICartReducerInitialState}) => state.cartSlice);
+    const {cartItems, subtotal, shippingCharges, tax, discount, total} = useSelector((state: RootState) => state.cartSlice);
 
 
     const [couponCode, setCouponCode] = useState<string>("");

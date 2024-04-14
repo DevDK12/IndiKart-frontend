@@ -1,6 +1,6 @@
 import ProductCard from "../../../../components/admin/ProductCart";
 import { useDeleteOrderMutation, useOrderDetailQuery, useProcessOrderMutation } from "../../../../redux/api/orderApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { TOrder } from "../../../../Types/order-types";
 import { server } from "../../../../redux/api/productApi";
@@ -52,7 +52,7 @@ const ManageTransaction = () => {
     const [processOrder, {isLoading: processLoading}] = useProcessOrderMutation();
     const [deleteOrder, {isLoading: deleteLoading}] = useDeleteOrderMutation();
 
-    const {data, isLoading: orderIsLoading, isSuccess: orderIsSuccess, isError, error} = useOrderDetailQuery(orderId!);
+    const {data, isLoading: orderIsLoading, isSuccess: orderIsSuccess, isError} = useOrderDetailQuery(orderId!);
 
 
     const {
@@ -118,7 +118,7 @@ const ManageTransaction = () => {
 
 
     if(isError){
-        toast.error((error as Error).message);
+        return <Navigate to='/404' replace />;
     }
 
 

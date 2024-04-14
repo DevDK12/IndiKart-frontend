@@ -4,8 +4,8 @@ import { Column } from "react-table";
 import { Link } from "react-router-dom";
 import { useMyOrdersQuery } from "../../redux/api/orderApi";
 import toast from "react-hot-toast";
-import { IUserReducerInitialState } from "../../Types/user-types";
 import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 
 
@@ -50,7 +50,7 @@ const column: Column<DataType>[] = [
 
 const Orders = () => {
 
-    const {user} = useSelector((state: {userSlice: IUserReducerInitialState}) => state.userSlice);
+    const {user} = useSelector((state: RootState) => state.userSlice);
 
     const [rows, setRows] = useState<DataType[]>([]);
 

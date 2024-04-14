@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { ICartReducerInitialState, TCartItem } from '../../Types/cart-types';
 import { clearCart } from '../../redux/reducer/cart-slice';
-import { IUserReducerInitialState } from '../../Types/user-types';
+import { RootState } from '../../redux/store';
 
 
 
@@ -27,8 +27,8 @@ const CheckoutForm = () => {
     const {tax, shippingCharges, total, subtotal, discount, cartItems, shippingInfo} = useSelector((state:  { cartSlice: ICartReducerInitialState }) => state.cartSlice);
 
     //_ Use rootState later
-    // const {user} = useSelector((state: RootState) => state.userSlice);
-    const {user} = useSelector((state: {userSlice: IUserReducerInitialState}) => state.userSlice);
+    // const {user} = useSelector((state: {userSlice: IUserReducerInitialState}) => state.userSlice);
+    const {user} = useSelector((state: RootState) => state.userSlice);
 
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
 

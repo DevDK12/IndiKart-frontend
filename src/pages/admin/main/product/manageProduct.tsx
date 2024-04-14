@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Input from "../../../../components/ui/Input";
 import { FaTrash } from "react-icons/fa";
 import { server, useDeleteProductMutation, useSingleProductQuery, useUpdateProductMutation } from "../../../../redux/api/productApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 
@@ -23,7 +23,7 @@ const ManageProduct = () => {
     const [updateProduct] = useUpdateProductMutation();
     const [deleteProduct] = useDeleteProductMutation();
 
-    const { data, isSuccess, isError, isLoading, error } = useSingleProductQuery(productId!);
+    const { data, isSuccess, isError, isLoading} = useSingleProductQuery(productId!);
 
     const {price, stock, name, photo} = data?.data?.product || {
         price: 0,
@@ -93,7 +93,7 @@ const ManageProduct = () => {
             }
         }
         catch(e){
-            toast.error(e.message);
+            toast.error((e as Error).message);
         }
     }
 
@@ -126,24 +126,22 @@ const ManageProduct = () => {
             const { status, message } = res.data;
             if(status === 'success'){
                 toast.success(message);
-                navigate('/admin/product');
             }
         }
         catch(e){
-            toast.error(e.message);
+            toast.error((e as Error).message);
         }
 
 
     };
 
     if(isError){
-        toast.error(error.data.message);
+        return <Navigate to='/404' replace />;
     }
 
     return (
         <section className="main-section flex flex-col gap-4 justify-center mt-8 sm:flex-row">
             {isLoading && <p>Loading Product Details...</p>}
-            {isError && <p>No response from server</p>}
             {isSuccess && 
             <article className="main-container py-10 relative bg-primary-100 min-h-[40vh] overflow-y-auto flex flex-col gap-3  sm:min-h-[65vh] md:w-1/3 md:min-h-[85vh] sm:w-1/2 ">
                 <strong className="font-semibold text-white/50">ID - {productId}</strong>

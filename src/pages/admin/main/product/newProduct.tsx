@@ -3,17 +3,17 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import Input from "../../../../components/ui/Input";
 import { useCreateProductMutation } from "../../../../redux/api/productApi";
 import { useSelector } from "react-redux";
-import { IUserReducerInitialState } from "../../../../Types/user-types";
 import toast from "react-hot-toast";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../../redux/store";
 
 
 
 const NewProduct = () => {
 
-    const { user } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
+    const {user} = useSelector((state: RootState) => state.userSlice);
 
     const navigate = useNavigate();
 

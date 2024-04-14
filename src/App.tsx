@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { lazy, useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 
 
 import Layout from './components/Layout/Layout';
@@ -7,6 +7,7 @@ import AdminLayout from './components/Layout/Admin/AdminLayout';
 
 
 
+const NotFound = lazy(() => import('./pages/notfound'));
 
 const Home = lazy(() => import('./pages/shop/home'));
 const Search = lazy(() => import('./pages/shop/search'));
@@ -43,8 +44,8 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { loginUser, logoutUser } from './redux/reducer/user-slice';
 import { getSingleUser } from './redux/api/userApi';
 import toast from 'react-hot-toast';
-import { IUserReducerInitialState } from './Types/user-types';
-import { ICartReducerInitialState } from './Types/cart-types';
+import Loader from './components/ui/Loader';
+import { RootState } from './redux/store';
 
 
 
@@ -55,8 +56,8 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  const { loading: userLoaidng, user } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
-  const {cartItems} = useSelector((state: {cartSlice: ICartReducerInitialState}) => state.cartSlice);
+  const { loading: userLoaidng, user } = useSelector((state: RootState) => state.userSlice);
+  const {cartItems} = useSelector((state: RootState) => state.cartSlice);
 
   useEffect(() => {
     const auth = getAuth();
@@ -137,7 +138,10 @@ const App = () => {
         <Route path="/admin/product/new" element={adminOnly ? <NewProduct /> : <Navigate to='/' />} />
         <Route path="/admin/product/:productId" element={adminOnly ? <ManageProduct /> : <Navigate to='/' />} />
         <Route path="/admin/transaction/:orderId" element={adminOnly ? <ManageTransaction /> : <Navigate to='/' />} />
+
+        
       </Route>
+      <Route path="*" element={<Suspense fallback={<Loader />}><NotFound /></Suspense>} />
     </Routes>
   )
 }

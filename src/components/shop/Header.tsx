@@ -8,10 +8,10 @@ import {
 } from "react-icons/fa";
 import { useState } from "react";
 import Avatar from "../ui/Avatar";
-import { IUserReducerInitialState } from "../../Types/user-types";
 import { logoutUser } from "../../redux/reducer/user-slice";
 import toast from "react-hot-toast";
 import { getAuth, signOut } from "firebase/auth";
+import { RootState } from "../../redux/store";
 
 
 
@@ -29,7 +29,7 @@ const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const {user} = useSelector((state: {userSlice: IUserReducerInitialState}) => state.userSlice);
+    const {user} = useSelector((state: RootState) => state.userSlice)
 
 
     const [isOpen, setIsOpen] = useState<boolean>(false);

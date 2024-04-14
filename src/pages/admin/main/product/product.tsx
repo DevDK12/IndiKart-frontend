@@ -5,9 +5,9 @@ import { Column } from "react-table";
 import TableHOC from "../../../../components/ui/TableHOC";
 import { useUserProductsQuery } from "../../../../redux/api/productApi";
 import { useSelector } from "react-redux";
-import { IUserReducerInitialState } from "../../../../Types/user-types";
 import toast from "react-hot-toast";
 import { ErrorResponse } from "../../../../Types/apiTypes";
+import { RootState } from "../../../../redux/store";
 
 
 
@@ -51,7 +51,7 @@ const server = import.meta.env.VITE_SERVER;
 
 const Products = () => {
 
-    const { user } = useSelector((state: { userSlice: IUserReducerInitialState }) => state.userSlice);
+    const { user } = useSelector((state: RootState) => state.userSlice);
 
     const [rows, setRows] = useState<DataType[]>([]);
 
@@ -67,7 +67,7 @@ const Products = () => {
                 name: product.name,
                 price: product.price,
                 stock: product.stock,
-                action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold" to={`/admin/product/${product._id}`}>Manage</Link>,
+                action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold text-white" to={`/admin/product/${product._id}`}>Manage</Link>,
             })))
         }
     }, [productsData, isSuccess])
