@@ -66,14 +66,22 @@ const Transaction = () => {
 
     useEffect(()=>{
         if(isSuccess && data?.data?.orders){
-            setRows(data.data.orders.map(order => ({
-                user: order.user.email,
-                amount: Number(order.total),
-                discount: Number(order.discount),
-                quantity: Number(order.orderItems.length),
-                status: <span className={`text-${order.status === "processing" ? "red" : order.status === "shipped" ? "green" : "purple"}-500 font-semibold`}>{order.status}</span>,
-                action: <Link className="bg-cyan-400 text-white px-4 py-2 rounded-lg font-semibold" to={`/admin/transaction/${order._id}`}>Manage</Link >,
-            })));
+            
+            setRows(data.data.orders.map(order => {
+                let color = "";
+                if(order.status === "processing") color = "text-red-500";
+                if(order.status === "shipped") color = "text-green-500";
+                if(order.status === "delivered") color = "text-purple-500";
+
+                    return{
+                        user: order.user.email,
+                        amount: Number(order.total),
+                        discount: Number(order.discount),
+                        quantity: Number(order.orderItems.length),
+                        status: <span className={`${color} font-semibold`}>{order.status}</span>,
+                        action: <Link className="bg-cyan-400 text-white px-4 py-2 rounded-lg font-semibold" to={`/admin/transaction/${order._id}`}>Manage</Link >,
+                    }}
+            )); 
         }
     },[data, isSuccess]);
 
