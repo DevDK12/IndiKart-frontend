@@ -1,4 +1,5 @@
 import { ICartReducerInitialState } from "./cart-types"
+import { TBarChart, TDashboardStats, TLineChart, TPieChart } from "./dashboard-types"
 import { TOrder, TOrderItem } from "./order-types"
 import { TProduct } from "./product-types"
 import { TUser } from "./user-types"
@@ -129,5 +130,45 @@ export type AllUserResponse = {
     status: string,
     data: {
         users: TUser[]
+    }
+}
+
+
+
+
+export type StatsResponse = {
+    status: string,
+    data : {
+        stats: TDashboardStats;
+    }
+}
+
+
+
+
+
+
+
+export type PieResponse = {
+    status: string,
+    data: {
+        charts: TPieChart
+    }
+}
+
+
+
+export type BarResponse = {
+    status : string,
+    data : {
+        charts: TBarChart
+    }
+}
+
+
+export type LineResponse = {
+    status : string,
+    data : {
+        charts: TLineChart
     }
 }

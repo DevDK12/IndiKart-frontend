@@ -92,14 +92,23 @@ function TableHOC<T extends object>(
 
                                             return (
                                                 <tr {...row.getRowProps()}>
-                                                    {row.cells.map((cell) => (
-                                                        <td
-                                                            className="px-6 py-4 whitespace-nowrap"
-                                                            {...cell.getCellProps()}
-                                                        >
-                                                            <div className="text-sm text-gray-900">{cell.render("Cell")}</div>
-                                                        </td>
-                                                    ))}
+                                                    {row.cells.map((cell) => {
+                                                        let color = 'text-gray-900';
+                                                        if (cell.value === 'processing') color = 'font-bold text-red-400';
+                                                        if (cell.value === 'shipped') color = 'font-bold text-green-400';
+                                                        if (cell.value === 'delivered') color = 'font-bold text-purple-400';
+
+                                                        return (
+                                                                <td
+                                                                    className="px-6 py-4 whitespace-nowrap"
+                                                                    {...cell.getCellProps()}
+                                                                >
+                                                                    {/* <div className="text-sm text-gray-900">{cell.render("Cell")}</div> */}
+                                                                    <div className={`text-sm ${color}`}>{cell.render("Cell")}</div>
+                                                                </td>
+                                                            )}
+                                                        )
+                                                    }
                                                 </tr>
                                             );
                                         })}

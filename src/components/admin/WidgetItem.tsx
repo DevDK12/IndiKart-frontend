@@ -23,13 +23,13 @@ const WidgetItem = ({ heading, value, percent, color, txtColor, amount }: Widget
             <div >
                 <p className="subtitle opacity-70 ">{heading}</p>
                 <h4 className="text-lg font-semibold">{amount ? `₹${value}` : value}</h4>
-                {percent > 0 ? (
+                {percent >= 0 ? (
                     <span className="text-green-400 flex items-center gap-1">
-                        <HiTrendingUp /> +{percent}%{" "}
+                        <HiTrendingUp /> +{percent > 9999 ? '9999' : percent }%{" "}
                     </span>
                 ) : (
                     <span className="text-red-400 flex items-center gap-1">
-                        <HiTrendingDown /> {percent}%{" "}
+                        <HiTrendingDown /> ${percent < -9999 ? '-9999' : percent }%{" "}
                     </span>
                 )}
             </div>
@@ -42,7 +42,8 @@ const WidgetItem = ({ heading, value, percent, color, txtColor, amount }: Widget
             >
                 <div className="absolute w-16 h-16 bg-primary-100 rounded-full"></div>
                 <span className={clsx(txtColor, 'font-bold relative')}>
-                    {percent}%
+                    {percent >= 0 && `${percent > 9999 ? '9999' : percent }%`}
+                    {percent < 0 && `${percent < -9999 ? '-9999' : percent }%`}
                 </span>
             </div>
         </article>

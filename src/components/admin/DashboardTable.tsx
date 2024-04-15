@@ -1,25 +1,19 @@
 import { Column } from "react-table";
 import TableHOC from "@ui/TableHOC";
+import { TLatestTransactions } from "@/Types/dashboard-types";
 
 
 
 
-interface DataType {
-    _id: string;
-    quantity: number;
-    discount: number;
-    amount: number;
-    status: string;
-}
-
-const columns: Column<DataType>[] = [
+const columns: Column<TLatestTransactions>[] = [
     {
         Header: "Id",
         accessor: "_id",
     },
     {
         Header: "Quantity",
-        accessor: "quantity",
+        // accessor: "quantity",
+        accessor: "items",
     },
     {
         Header: "Discount",
@@ -27,7 +21,7 @@ const columns: Column<DataType>[] = [
     },
     {
         Header: "Amount",
-        accessor: "amount",
+        accessor: "total",
     },
     {
         Header: "Status",
@@ -37,8 +31,8 @@ const columns: Column<DataType>[] = [
 
 
 
-const DashboardTable = ({ data = [] }: { data: DataType[] }) => {
-    return TableHOC<DataType>(columns, data, "main-container w-full overflow-x-auto hide-scrollbar bg-primary-100 flex flex-col gap-4 ", "Top Transaction")();
+const DashboardTable = ({ data = [] }: { data: TLatestTransactions[] }) => {
+    return TableHOC<TLatestTransactions>(columns, data, "main-container w-full overflow-x-auto hide-scrollbar bg-primary-100 flex flex-col gap-4 ", "Top Transaction")();
 };
 
 export default DashboardTable;
