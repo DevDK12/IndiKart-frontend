@@ -4,13 +4,14 @@ import {
 } from "react-icons/ci";
 import { IoMdNotifications } from "react-icons/io";
 import Avatar from "@ui/Avatar";
-import { useDispatch} from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa";
 import { getAuth, signOut } from "firebase/auth";
 import { logoutUser } from "@/redux/reducer/user-slice";
 import toast from "react-hot-toast";
+import { RootState } from "@/redux/store";
 
 
 
@@ -20,6 +21,12 @@ const AdminHeader = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+
+    const {user} = useSelector((state: RootState) => state.userSlice);
+
+    const imageUrl = user?.image || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp';
+
 
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -51,7 +58,7 @@ const AdminHeader = () => {
                 <IoMdNotifications className="w-6 h-6" />
                 <Avatar
                     className="w-8 h-8"
-                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp'
+                    src={imageUrl}
                     onAvatar={() => setIsOpen(prev => !prev)}
                 />
                 <dialog open={isOpen} >

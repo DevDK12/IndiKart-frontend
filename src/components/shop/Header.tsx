@@ -29,7 +29,10 @@ const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const {user} = useSelector((state: RootState) => state.userSlice)
+    const {user} = useSelector((state: RootState) => state.userSlice);
+    
+    const imageUrl = user?.image || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp';
+
 
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -43,7 +46,6 @@ const Header = () => {
                 toast.success('Logged out');
             })
             .catch((err) => {
-                // An error happened.
                 toast.error(err?.message || 'Loggeg out failed');
             }
         );
@@ -78,7 +80,7 @@ const Header = () => {
                         <>
                             <Avatar
                                 className="w-8 h-8"
-                                src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp'
+                                src={imageUrl}
                                 onAvatar={() => setIsOpen(prev => !prev)}
                             />
                             <dialog open={isOpen} >
