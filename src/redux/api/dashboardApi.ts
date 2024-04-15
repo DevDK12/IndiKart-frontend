@@ -12,16 +12,16 @@ export const dashboardApi = createApi({
         dashboardStats: builder.query<StatsResponse, void>({
             query: () => 'stats',
         }),
-        pie: builder.query<PieResponse, void>({
+        pieStats: builder.query<PieResponse, void>({
             query: () => 'pie',
         }),
-        line: builder.query<LineResponse, void>({
+        lineStats: builder.query<LineResponse, void>({
             query: () => 'line',
         }),
-        bar: builder.query<BarResponse, void>({
+        barStats: builder.query<BarResponse, void>({
             query: () => 'bar',
         })
     })
 })
 
-export const {useDashboardStatsQuery, usePieQuery, useLineQuery, useBarQuery } = dashboardApi;
+export const {useDashboardStatsQuery, usePieStatsQuery, useLineStatsQuery, useBarStatsQuery } = dashboardApi;

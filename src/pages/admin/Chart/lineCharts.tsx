@@ -1,3 +1,7 @@
+import toast from "react-hot-toast";
+
+import { useLineStatsQuery } from "@/redux/api/dashboardApi";
+import { ErrorResponse } from "@/Types/apiTypes";
 import LineChart from "@ui/Charts/LineChart";
 
 const months = [
@@ -16,6 +20,30 @@ const months = [
 ];
 
 const LineCharts = () => {
+
+    
+    const {data, isError, isLoading, isSuccess, error} = useLineStatsQuery();
+
+    if(isError ){
+        toast.error((error as ErrorResponse)?.data.message);
+        return <>
+            Error loading Dashboard ...
+        </>
+    }
+
+
+    if(isLoading || !data){
+        return (
+            <>
+                Loading Dashboard ...
+            </>
+        )
+    }
+
+    const charts = data.data.charts;
+
+
+    if(isSuccess)
     return (
         <section className="main-section flex flex-col gap-20 justify-center sm:justify-stretch sm:items-center">
 
@@ -23,9 +51,7 @@ const LineCharts = () => {
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <LineChart
-                    data={[
-                        200, 444, 444, 556, 778, 455, 990, 1444, 256, 447, 1000, 1200,
-                    ]}
+                    data={charts.users}
                     label="Users"
                     borderColor="rgb(53, 162, 255)"
                     labels={months}
@@ -36,7 +62,7 @@ const LineCharts = () => {
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <LineChart
-                    data={[40, 60, 244, 100, 143, 120, 41, 47, 50, 56, 32]}
+                    data={charts.products}
                     backgroundColor={"hsla(269,80%,40%,0.4)"}
                     borderColor={"hsl(269,80%,40%)"}
                     labels={months}
@@ -47,10 +73,7 @@ const LineCharts = () => {
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <LineChart
-                    data={[
-                        24000, 14400, 24100, 34300, 90000, 20000, 25600, 44700, 99000,
-                        144400, 100000, 120000,
-                    ]}
+                    data={charts.revenue}
                     backgroundColor={"hsla(129,80%,40%,0.4)"}
                     borderColor={"hsl(129,80%,40%)"}
                     label="Revenue"
@@ -61,10 +84,7 @@ const LineCharts = () => {
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <LineChart
-                    data={[
-                        9000, 12000, 12000, 9000, 1000, 5000, 4000, 1200, 1100, 1500,
-                        2000, 5000,
-                    ]}
+                    data={charts.discount}
                     backgroundColor={"hsla(29,80%,40%,0.4)"}
                     borderColor={"hsl(29,80%,40%)"}
                     label="Discount"

@@ -1,7 +1,9 @@
+import toast from "react-hot-toast";
+
 import DoughnutChart from "@ui/Charts/DoughnutChart";
 import PieChart from "@ui/Charts/PieChart";
-
-import data from '@assets/data.json';
+import { usePieStatsQuery } from "@/redux/api/dashboardApi";
+import { ErrorResponse } from "@/Types/apiTypes";
 
 
 
@@ -9,6 +11,29 @@ import data from '@assets/data.json';
 
 
 const PieCharts = () => {
+
+    const {data, isError, isLoading, isSuccess, error} = usePieStatsQuery();
+
+    if(isError ){
+        toast.error((error as ErrorResponse)?.data.message);
+        return <>
+            Error loading Dashboard ...
+        </>
+    }
+
+
+    if(isLoading || !data){
+        return (
+            <>
+                Loading Dashboard ...
+            </>
+        )
+    }
+
+    const charts = data.data.charts;
+
+
+    if(isSuccess)
     return (
         <section className="main-section">
 
@@ -19,7 +44,7 @@ const PieCharts = () => {
                 <article className="px-5 py-4 flex flex-col justify-center items-center bg-primary-100 rounded-md min-w-[200px] w-2/3 sm:w-full lg:w-3/4">
                     <PieChart
                         labels={["Processing", "Shipped", "Delivered"]}
-                        data={[12, 9, 13]}
+                        data={[charts.orderFullfilment.processing, charts.orderFullfilment.shipped, charts.orderFullfilment.delivered]}
                         backgroundColor={[
                             `hsl(110,80%, 80%)`,
                             `hsl(110,80%, 50%)`,
@@ -32,10 +57,10 @@ const PieCharts = () => {
 
                 <article className="px-5 py-4 flex flex-col justify-center items-center bg-primary-100 rounded-md min-w-[200px] w-2/3 sm:w-full lg:w-3/4">
                     <DoughnutChart
-                        labels={data.categories.map((i) => i.heading)}
-                        data={data.categories.map((i) => i.value)}
-                        backgroundColor={data.categories.map(
-                            (i) => `hsl(${i.value * 4}, ${i.value}%, 50%)`
+                        labels={charts.categories.map((i) => i.name)}
+                        data={charts.categories.map((i) => i.count)}
+                        backgroundColor={charts.categories.map(
+                            (i) => `hsl(${i.count * 400}, ${i.count*100}%, 50%)`
                         )}
                         legends={false}
                         offset={[0, 0, 0, 80]}
@@ -45,7 +70,7 @@ const PieCharts = () => {
                 <article className="px-5 py-4 flex flex-col justify-center items-center bg-primary-100 rounded-md min-w-[200px] w-2/3 sm:w-full lg:w-3/4">
                     <DoughnutChart
                         labels={["In Stock", "Out Of Stock"]}
-                        data={[40, 20]}
+                        data={[charts.stockAvailablity.inStock, charts.stockAvailablity.outOfStock]}
                         backgroundColor={["hsl(269,80%,40%)", "rgb(53, 162, 255)"]}
                         legends={false}
                         offset={[0, 80]}
@@ -62,7 +87,7 @@ const PieCharts = () => {
                             "Production Cost",
                             "Net Margin",
                         ]}
-                        data={[32, 18, 5, 20, 25]}
+                        data={[charts.revenueDistribution.marketingCost, charts.revenueDistribution.discount, charts.revenueDistribution.burnt, charts.revenueDistribution.productionCost, charts.revenueDistribution.netMargin]}
                         backgroundColor={[
                             "hsl(110,80%,40%)",
                             "hsl(19,80%,40%)",
@@ -82,7 +107,8 @@ const PieCharts = () => {
                             "Adult (20-40)",
                             "Older (above 40)",
                         ]}
-                        data={[30, 250, 70]}
+                        // data={[30, 250, 70]}
+                        data={[charts.usersAgeGroup.teen, charts.usersAgeGroup.adult, charts.usersAgeGroup.old]}
                         backgroundColor={[
                             `hsl(10, ${80}%, 80%)`,
                             `hsl(10, ${80}%, 50%)`,
@@ -95,11 +121,11 @@ const PieCharts = () => {
                 <article className="px-5 py-4 flex flex-col justify-center items-center bg-primary-100 rounded-md min-w-[200px] w-2/3 sm:w-full lg:w-3/4">
                     <DoughnutChart
                         labels={["Admin", "Customers"]}
-                        data={[40, 250]}
+                        data={[charts.adminCustomer.admin, charts.adminCustomer.customer]}
                         backgroundColor={[`hsl(335, 100%, 38%)`, "hsl(44, 98%, 50%)"]}
                         offset={[0, 50]}
                     />
-                    <h2 className="subtitle md:text-xl">Label unknown</h2>
+                    <h2 className="subtitle md:text-xl">Users Distribution</h2>
                 </article>
             </div>
         </section>
