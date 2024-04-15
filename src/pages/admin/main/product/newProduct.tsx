@@ -52,6 +52,8 @@ const NewProduct = () => {
 
         if (!name || !category || !price || !stock || !photo) return;
 
+        if(Number(stock) < 0 || Number(price) <= 0) return;
+
         const formData = new FormData();
         formData.append('user', user?._id as string);
         formData.append("name", name);
