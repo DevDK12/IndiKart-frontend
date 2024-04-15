@@ -1,21 +1,38 @@
+import { useBarStatsQuery } from "@/redux/api/dashboardApi";
+import { ErrorResponse } from "@/Types/apiTypes";
+import { lastMonths } from "@/utils/functions";
 import BarChart from "@ui/Charts/BarChart";
+import toast from "react-hot-toast";
 
-const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
-];
+
 
 const Barcharts = () => {
+
+    const [last6months, last12months] = lastMonths();
+
+
+    const {data, isError, isLoading, isSuccess, error} = useBarStatsQuery();
+
+    if(isError ){
+        toast.error((error as ErrorResponse)?.data.message);
+        return <>
+            Error loading Dashboard ...
+        </>
+    }
+
+
+    if(isLoading || !data){
+        return (
+            <>
+                Loading Dashboard ...
+            </>
+        )
+    }
+
+    const charts = data.data.charts;
+
+
+    if(isSuccess)
     return (
         <section className="main-section flex flex-col gap-20 justify-center sm:justify-stretch sm:items-center">
 
@@ -23,13 +40,14 @@ const Barcharts = () => {
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <BarChart
-                    data_2={[300, 144, 433, 655, 237, 755, 190]}
-                    data_1={[200, 444, 343, 556, 778, 455, 990]}
+                    data_1={charts.products}
+                    data_2={charts.users}
                     title_1="Products"
                     title_2="Users"
                     bgColor_1={`hsl(260, 50%, 30%)`}
                     bgColor_2={`hsl(360, 90%, 90%)`}
                     textColor="white"
+                    labels={last6months}
                 />
                 <h2 className="subtitle md:text-xl">Top Products & Top Customers</h2>
             </article>
@@ -37,15 +55,13 @@ const Barcharts = () => {
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <BarChart
                     horizontal={true}
-                    data_1={[
-                        200, 444, 343, 556, 778, 455, 990, 444, 122, 334, 890, 909,
-                    ]}
+                    data_1={charts.orders}
                     data_2={[]}
                     title_1="Orders"
                     title_2=""
                     bgColor_1={`hsl(180, 40%, 50%)`}
                     bgColor_2=""
-                    labels={months}
+                    labels={last12months}
                     textColor="white"
                 />
                 <h2 className="subtitle md:text-xl">Orders throughout the year</h2>

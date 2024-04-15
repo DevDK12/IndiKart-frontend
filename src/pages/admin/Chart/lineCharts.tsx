@@ -3,26 +3,25 @@ import toast from "react-hot-toast";
 import { useLineStatsQuery } from "@/redux/api/dashboardApi";
 import { ErrorResponse } from "@/Types/apiTypes";
 import LineChart from "@ui/Charts/LineChart";
+import { lastMonths } from "@/utils/functions";
 
-const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
-];
+
 
 const LineCharts = () => {
 
+    const last12months = lastMonths()[1];
+
     
     const {data, isError, isLoading, isSuccess, error} = useLineStatsQuery();
+
+
+    if(isLoading ){
+        return (
+            <>
+                Loading Dashboard ...
+            </>
+        )
+    }
 
     if(isError ){
         toast.error((error as ErrorResponse)?.data.message);
@@ -32,16 +31,11 @@ const LineCharts = () => {
     }
 
 
-    if(isLoading || !data){
-        return (
-            <>
-                Loading Dashboard ...
-            </>
-        )
-    }
 
-    const charts = data.data.charts;
-
+    const users = data?.data.charts.users || [];
+    const products = data?.data.charts.products || [];
+    const revenue = data?.data.charts.revenue || [];
+    const discount = data?.data.charts.discount || [];
 
     if(isSuccess)
     return (
@@ -51,10 +45,10 @@ const LineCharts = () => {
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <LineChart
-                    data={charts.users}
+                    data={users}
                     label="Users"
                     borderColor="rgb(53, 162, 255)"
-                    labels={months}
+                    labels={last12months}
                     backgroundColor="rgba(53, 162, 255, 0.5)"
                 />
                 <h2 className="subtitle md:text-xl">Active Users</h2>
@@ -62,10 +56,10 @@ const LineCharts = () => {
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <LineChart
-                    data={charts.products}
+                    data={products}
                     backgroundColor={"hsla(269,80%,40%,0.4)"}
                     borderColor={"hsl(269,80%,40%)"}
-                    labels={months}
+                    labels={last12months}
                     label="Products"
                 />
                 <h2 className="subtitle md:text-xl">Total Products (SKU)</h2>
@@ -73,22 +67,22 @@ const LineCharts = () => {
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <LineChart
-                    data={charts.revenue}
+                    data={revenue}
                     backgroundColor={"hsla(129,80%,40%,0.4)"}
                     borderColor={"hsl(129,80%,40%)"}
                     label="Revenue"
-                    labels={months}
+                    labels={last12months}
                 />
                 <h2 className="subtitle md:text-xl">Total Revenue </h2>
             </article>
 
             <article className="px-5 py-4 flex flex-col gap-10 justify-center items-center bg-primary-100 rounded-md w-full md:w-7/12 lg:w-5/6 xl:w-4/6">
                 <LineChart
-                    data={charts.discount}
+                    data={discount}
                     backgroundColor={"hsla(29,80%,40%,0.4)"}
                     borderColor={"hsl(29,80%,40%)"}
                     label="Discount"
-                    labels={months}
+                    labels={last12months}
                 />
                 <h2 className="subtitle md:text-xl">Discount Allotted </h2>
             </article>
