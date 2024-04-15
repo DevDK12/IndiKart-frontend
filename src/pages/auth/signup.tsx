@@ -35,7 +35,6 @@ const Signup = () => {
     const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(email, password, dob);
 
         const user = {
             _id: uuid() as string,

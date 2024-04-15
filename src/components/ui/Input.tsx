@@ -49,7 +49,7 @@ const Input = ({ label, type, placeholder, value, onChange, options, variant = '
             <select
                 className={`w-full px-3 sm:w-2/3 rounded-md p-1 border-2 border-gray-400 focus:outline-none focus:border-cyan-400 text-secondary-txt`}
                 value={value}
-                onSelect={onSelect}
+                onChange={onSelect}
             >
                 <option value="" disabled>{placeholder}</option>
                 {options?.map((option, index) => (
