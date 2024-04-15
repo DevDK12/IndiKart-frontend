@@ -11,15 +11,19 @@ export const dashboardApi = createApi({
     endpoints: (builder) => ({
         dashboardStats: builder.query<StatsResponse, void>({
             query: () => 'stats',
+            keepUnusedDataFor: 0,
         }),
         pieStats: builder.query<PieResponse, void>({
             query: () => 'pie',
+            keepUnusedDataFor: 0,
         }),
         lineStats: builder.query<LineResponse, void>({
             query: () => 'line',
+            keepUnusedDataFor: 0,
         }),
         barStats: builder.query<BarResponse, void>({
             query: () => 'bar',
+            keepUnusedDataFor: 0,
         })
     })
 })
