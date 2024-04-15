@@ -63,13 +63,17 @@ const Products = () => {
     useEffect(() => {
         if (productsData && isSuccess) {
             const { data: { products } } = productsData;
-            setRows(products.map(product => ({
-                photo: <img className="w-20 rounded-md" src={`${server}/${product.photo}`} alt="Shoes" />,
-                name: product.name,
-                price: product.price,
-                stock: product.stock,
-                action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold text-white" to={`/admin/product/${product._id}`}>Manage</Link>,
-            })))
+            setRows(products.map(product => {
+                const photoUrl =  product.photo.includes('http') ? product.photo : `${server}/${product.photo}`;
+                return ({
+                    photo: <img className="w-20 rounded-md" src={photoUrl} alt="Shoes" />,
+                    name: product.name,
+                    price: product.price,
+                    stock: product.stock,
+                    action: <Link className="bg-cyan-400 px-4 py-2 rounded-lg font-semibold text-white" to={`/admin/product/${product._id}`}>Manage</Link>,
+                })
+            }
+        ))
         }
     }, [productsData, isSuccess])
 

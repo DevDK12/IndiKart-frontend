@@ -88,17 +88,21 @@ const OrderDetail = () => {
             { orderIsSuccess && orderItems.length > 0 &&
                 <article className="main-container py-10 lg:px-8 relative bg-primary-100 min-h-[40vh] overflow-y-auto flex flex-col gap-3  sm:min-h-[65vh] md:w-1/3 md:min-h-[85vh] sm:w-1/2 ">
                     <h2 className="title">Order Items</h2>
-                    {orderItems.map(i => (
-                        <ProductCard
-                            key={i.productId}
-                            name={i.name}
-                            photo={`${server}/${i.photo}`}
-                            // productId={i.productId}
-                            _id={i.productId}
-                            quantity={i.quantity}
-                            price={i.price}
-                        />
-                    ))}
+                    {orderItems.map(i => {
+                        const photoUrl =  i.photo.includes('http') ? i.photo : `${server}/${i.photo}`;
+                        return (
+                            <ProductCard
+                                key={i.productId}
+                                name={i.name}
+                                photo={photoUrl}
+                                // productId={i.productId}
+                                _id={i.productId}
+                                quantity={i.quantity}
+                                price={i.price}
+                            />
+                        )
+                    }
+                    )}
                 </article>
             }
 

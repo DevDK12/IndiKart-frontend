@@ -23,9 +23,11 @@ const CartItemCard = ({
 
     const { photo, productId, name, price, quantity } = cartItem;
 
+    const photoUrl =  photo.includes('http') ? photo : `${server}/${photo}`;
+
     return (
         <div className="bg-primary-200 grid lg:gap-4 grid-cols-5 grid-rows-2 lg:grid-cols-9 rounded-md">
-            <img className="rounded-l-md w-36 h-36  col-span-2 row-span-2 " src={`${server}/${photo}`} alt={name} />
+            <img className="rounded-l-md w-36 h-36  col-span-2 row-span-2 " src={photoUrl} alt={name} />
 
             <article className="col-start-3 col-span-3 lg:col-span-5 lg:row-span-2 flex flex-col lg:gap-4 justify-center">
                 <Link className="text-xl xs:text-2xl font-thin" to={`/product/${productId}`}>{name}</Link>

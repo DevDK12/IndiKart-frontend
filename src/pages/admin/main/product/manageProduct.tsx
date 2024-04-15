@@ -138,6 +138,8 @@ const ManageProduct = () => {
     if(isError){
         return <Navigate to='/404' replace />;
     }
+    const photoUrl =  photo.includes('http') ? photo : `${server}/${photo}`;
+
 
     return (
         <section className="main-section flex flex-col gap-4 justify-center mt-8 sm:flex-row">
@@ -146,7 +148,7 @@ const ManageProduct = () => {
             <article className="main-container py-10 relative bg-primary-100 min-h-[40vh] overflow-y-auto flex flex-col gap-3  sm:min-h-[65vh] md:w-1/3 md:min-h-[85vh] sm:w-1/2 ">
                 <strong className="font-semibold text-white/50">ID - {productId}</strong>
                 <div className="h-5/6 bg-blue-400 rounded-md">
-                    <img className="w-full h-full object-cover rounded-md" src={`${server}/${photo}`} alt="Product" />
+                    <img className="w-full h-full object-cover rounded-md" src={photoUrl} alt="Product" />
                 </div>
                 <p className="mx-auto uppercase tracking-widest">{name}</p>
                 {stock > 0 ? (
