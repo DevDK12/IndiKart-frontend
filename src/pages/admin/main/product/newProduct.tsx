@@ -18,7 +18,7 @@ const NewProduct = () => {
 
     const navigate = useNavigate();
 
-    const [createProduct] = useCreateProductMutation();
+    const [createProduct, {isLoading: productAdding}] = useCreateProductMutation();
 
 
     const [name, setName] = useState<string>("");
@@ -50,7 +50,9 @@ const NewProduct = () => {
     const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!name || !category || !price || !stock || !photo) return;
+        if (!name || !category || !price || !stock || !photo){
+            return toast.error('Please fill all fields');
+        }
 
         if(Number(stock) < 0 || Number(price) <= 0) return;
 
@@ -79,11 +81,15 @@ const NewProduct = () => {
             }
         }
         catch (err) {
-            toast.error((err as Error).message || 'Error creating product');
+            toast.error((err as Error)?.message || 'Error creating product');
         }
 
     }
 
+
+    if(productAdding){
+        return <h1>Adding Product...</h1>;
+    }
 
 
     return (

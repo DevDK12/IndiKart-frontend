@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from 'react-responsive';
 import toast from "react-hot-toast";
 
@@ -39,10 +39,14 @@ const Search = () => {
 
 
     const { data: categoriesData, isSuccess: categorySuccess, isError: isCategoryError, error: categoryError } = useCategoriesQuery();
-    if (isCategoryError) {
-        const err = categoryError as ErrorResponse;
-        toast.error(err?.data?.message || 'No response from server');
-    }
+
+    
+    useEffect(()=>{
+        if (isCategoryError) {
+            const err = categoryError as ErrorResponse;
+            toast.error(err?.data?.message || 'No response from server');
+        }
+    },[isCategoryError, categoryError]);
 
 
     const { data: productsData, isLoading: productsLoading, isSuccess: productSuccess, isError: isProductsError, error: productsError } = useSearchProductsQuery({
@@ -55,10 +59,13 @@ const Search = () => {
     });
     let totalPage = 1;
 
-    if (isProductsError) {
-        const err = productsError as ErrorResponse;
-        toast.error(err?.data?.message || 'No response from server');
-    }
+    
+    useEffect(()=>{
+        if (isProductsError) {
+            const err = productsError as ErrorResponse;
+            toast.error(err?.data?.message || 'No response from server');
+        }
+    },[isProductsError, productsError]);
 
 
     let content: JSX.Element | null = null;

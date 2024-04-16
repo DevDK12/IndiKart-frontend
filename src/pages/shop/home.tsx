@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { ErrorResponse, Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
@@ -27,10 +27,13 @@ const Home = () => {
     const { data, isError, isLoading, isSuccess, error } = useLatestProductsQuery({ productsPerPage });
 
 
-    if (isError) {
-        const err = error as ErrorResponse;
-        toast.error(err?.data?.message || 'No response from server');
-    }
+    useEffect(()=>{
+        if (isError) {
+            const err = error as ErrorResponse;
+            toast.error(err?.data?.message || 'No response from server');
+        }
+
+    },[isError, error]);
     
     
     let products;

@@ -20,8 +20,8 @@ const ManageProduct = () => {
     const {productId} = useParams<{productId: string}>();
 
 
-    const [updateProduct] = useUpdateProductMutation();
-    const [deleteProduct] = useDeleteProductMutation();
+    const [updateProduct, {isLoading: productUpdating }] = useUpdateProductMutation();
+    const [deleteProduct,  {isLoading: productDeleting }] = useDeleteProductMutation();
 
     const { data, isSuccess, isError, isLoading} = useSingleProductQuery(productId!);
 
@@ -126,6 +126,7 @@ const ManageProduct = () => {
             const { status, message } = res.data;
             if(status === 'success'){
                 toast.success(message);
+                navigate('/admin/product');
             }
         }
         catch(e){
@@ -139,6 +140,17 @@ const ManageProduct = () => {
         return <Navigate to='/404' replace />;
     }
     const photoUrl =  photo.includes('http') ? photo : `${server}/${photo}`;
+
+
+
+
+
+    if(productUpdating){
+        return <p>Updating Product...</p>
+    }
+    if(productDeleting){
+        return <p>Deleting Product...</p>
+    }
 
 
     return (
