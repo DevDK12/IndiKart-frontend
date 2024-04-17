@@ -71,23 +71,22 @@ Note : Please do not mis-use this, use this only if you want to explore this pro
 ### Install 
 Please follow the instructions below to install the required packages.
 
-Note : This Project uses Vite-react Plugin :
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Note : This Project uses Vite-react Plugin : [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 
 1. Clone Repository 
-`git clone https://github.com/DevDK12/IndiKart-frontend.git`
-`cd IndiKart-frontend`
+- `git clone https://github.com/DevDK12/IndiKart-frontend.git`
+- `cd IndiKart-frontend`
 
 
 2. Install Package
-`npm i`
+- `npm i`
 
 
 3. Configure `.env` file
-- Create Firebase and Stripe account to get their api keys
-- Replace `<>` with corresponding key
-- Do not use any `"` around key or id
+Create Firebase and Stripe account to get their api keys
+Replace `<>` with corresponding key
+Do not use any `"` around key or id
 ```bash
 VITE_FIREBASE_API_KEY=<firebase api key>
 VITE_FIREBASE_PROJECT_ID=<firebase project key>
@@ -99,7 +98,7 @@ VITE_STRIPE_PUBLIC_KEY=<vite stripe public key>
 
 
 4. Run project
-`npm run dev`
+- `npm run dev`
 
 
 
