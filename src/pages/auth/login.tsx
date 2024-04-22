@@ -1,15 +1,17 @@
 import { FormEvent, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Auth, UserCredential, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
 
 
 import Input from "@ui/Input"
-import { useLoginUserMutation } from "@api/userApi";
+import { getSingleUser, useLoginUserMutation } from "@api/userApi";
 import { ILoginUserApi } from "@/Types/user-types";
 import { ErrorResponse } from "@/Types/apiTypes";
 import { auth } from "@/firebase";
+import { saveToken, saveUser } from "@/redux/reducer/user-slice";
+import { useDispatch } from "react-redux";
 
 
 
@@ -21,6 +23,10 @@ const logo = "https://cdn.pixabay.com/photo/2014/04/02/10/16/fire-303309_640.png
 const Login = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
+
+    const dispatch = useDispatch();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -28,9 +34,12 @@ const Login = () => {
     const [loginUser] = useLoginUserMutation();
 
 
+
+
+
+
     const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
 
         const user = {
             email,
@@ -47,13 +56,29 @@ const Login = () => {
                 throw new Error(error.data.message);
             }
 
-            const { status, message } = response.data;
-            if (status === 'success') {
-                toast.success(message);
-                navigate('/');
+            const { status, token } = response.data;
+            if (status !== 'success') {
+                throw new Error('Login failed');
             }
+            
+            dispatch(saveToken(token));
 
 
+            const data = await getSingleUser(token?.userId, token?.access_token);
+        
+            if('error' in data) throw new Error('User not found');
+            const {status: userStatus, data: {user: mongoUser}} = data;
+        
+            if(userStatus !== 'success'){
+                throw new Error('User not found');
+            }
+        
+            toast.success('User logged in successfully');
+            dispatch( saveUser(mongoUser));
+
+            navigate(from, {replace: true});
+            
+            localStorage.setItem('user', JSON.stringify(token));
         }
         catch (err) {
             toast.error((err as Error).message || 'Log in failed');
@@ -80,11 +105,29 @@ const Login = () => {
                 throw new Error('Login failed');
             }
 
-            const { status, message } = response.data;
-            if (status === 'success') {
-                toast.success(message);
-                navigate('/')
+            const { status, token } = response.data;
+            if (status !== 'success') {
+                throw new Error('Login failed');
             }
+
+            dispatch(saveToken(token));
+
+            
+            const data = await getSingleUser(token?.userId, token?.access_token);
+        
+            if('error' in data) throw new Error('User not found');
+            const {status: userStatus, data: {user: mongoUser}} = data;
+        
+            if(userStatus !== 'success'){
+                throw new Error('User not found');
+            }
+        
+            toast.success('User logged in successfully');
+            dispatch( saveUser(mongoUser));
+
+            navigate(from, {replace: true});
+            
+            localStorage.setItem('user', JSON.stringify(token));
         }
         catch (error) {
             console.log(error);

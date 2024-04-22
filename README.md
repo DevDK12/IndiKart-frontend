@@ -8,7 +8,7 @@
 
 ### Realease 
 - Frontend : 
-  - [Live]()
+  - [Live](https://indi-kart-frontend.vercel.app/)
   - [Repo](https://github.com/DevDK12/IndiKart-frontend)
 
 - Backend : 
@@ -75,15 +75,22 @@ Note : This Project uses Vite-react Plugin : [@vitejs/plugin-react-swc](https://
 
 
 1. Clone Repository 
-- `git clone https://github.com/DevDK12/IndiKart-frontend.git`
-- `cd IndiKart-frontend`
+```bash
+git clone https://github.com/DevDK12/IndiKart-frontend.git
+```
+```bash
+cd IndiKart-frontend
+```
 
 
 2. Install Package
-- `npm i`
+```bash
+npm i
+```
 
 
 3. Configure `.env` file
+**Note :** Create `.env` file in root directory
 Create Firebase and Stripe account to get their api keys
 Replace `<>` with corresponding key
 Do not use any `"` around key or id
@@ -98,7 +105,10 @@ VITE_STRIPE_PUBLIC_KEY=<vite stripe public key>
 
 
 4. Run project
-- `npm run dev`
+```bash
+npm run dev
+```
+
 
 
 
@@ -174,5 +184,6 @@ IndiKart-frontend
 │   ├── main.tsx
 │   ├── ...
 |
+│── .env
 │── ...
 ```

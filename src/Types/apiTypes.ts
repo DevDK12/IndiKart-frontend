@@ -14,6 +14,20 @@ export type MesssageResponse = {
 }
 
 
+export type TAccessToken = {
+    userId: string,
+    access_token: string,
+    expiry: string,
+}
+
+
+export type LoginResponse = {
+    status : string,
+    message : string,
+    token : TAccessToken,
+}
+
+
 
 
 export type UserResponse = {
@@ -21,6 +35,11 @@ export type UserResponse = {
     data: {
         user: TUser
     }
+}
+
+export type DeleteUserRequest = {
+    id: string,
+    token: string,
 }
 
 
@@ -36,7 +55,10 @@ export type ProductsResponse = {
     }
 }
 
-
+export type UserProductRequest = {
+    userId: string,
+    token: string,
+}
 
 
 
@@ -89,17 +111,42 @@ export type SingleProductRequest = {
 export type UpdateProductRequest = {
     formData: FormData,
     productId: string,
+    token: string,
+}
+
+export type ProductDetailRequest = {
+    productId: string,
+    token: string,
+}
+
+export type createProductRequest = {
+    formData: FormData,
+    token: string,
 }
 
 
 
-
-
-export type CreateOrderRequest = Omit<ICartReducerInitialState, 'loading' | 'cartItems'> & {
+export type TOrderPayload = Omit<ICartReducerInitialState, 'loading' | 'cartItems'> & {
     user: string,
     orderItems: TOrderItem[],
 }
 
+export type CreateOrderRequest =   {
+    data: TOrderPayload,
+    token: string,
+}
+
+
+export type MyOrderRequest = {
+    token: string,
+    userId: string,
+}
+
+
+export type OrderDetailRequest = {
+    token: string,
+    orderId: string,
+}
 
 export type OrdersResponse = {
     status: string,

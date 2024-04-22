@@ -52,15 +52,16 @@ const column: Column<DataType>[] = [
 
 const Orders = () => {
 
-    const {user} = useSelector((state: RootState) => state.userSlice);
+    const {user, token} = useSelector((state: RootState) => state.userSlice);
 
     const [rows, setRows] = useState<DataType[]>([]);
 
-    const {data, isError, isLoading, isSuccess, error} = useMyOrdersQuery(user?._id as string);
+    const {data, isError, isLoading, isSuccess, error} = useMyOrdersQuery({
+        userId: user?._id as string,
+        token: token!.access_token,
+    });
 
 
-    //_ order discount is not fetched properly
-    //_ Same with order quantity 
 
     useEffect(()=>{
         if(isSuccess){

@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import { useState } from "react";
 import Avatar from "../ui/Avatar";
-import { logoutUser } from "../../redux/reducer/user-slice";
+import { deleteUser } from "../../redux/reducer/user-slice";
 import toast from "react-hot-toast";
 import { getAuth, signOut } from "firebase/auth";
 import { RootState } from "../../redux/store";
@@ -41,9 +41,10 @@ const Header = () => {
         const auth = getAuth();
         signOut(auth)
             .then(() => {
-                dispatch(logoutUser());
+                dispatch(deleteUser());
                 navigate('/');
                 toast.success('Logged out');
+                localStorage.removeItem('user');
             })
             .catch((err) => {
                 toast.error(err?.message || 'Loggeg out failed');

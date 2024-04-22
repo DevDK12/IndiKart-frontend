@@ -1,3 +1,4 @@
+import { TAccessToken } from "./apiTypes";
 
 export type TUser = {
     _id: string;
@@ -11,6 +12,7 @@ export type TUser = {
 
 export interface IUserReducerInitialState {
     user: TUser | null;
+    token: TAccessToken | null;
     loading: boolean;
 }
 

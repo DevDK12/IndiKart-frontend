@@ -9,6 +9,9 @@ import DoughnutChart from "@ui/Charts/DoughnutChart"
 import DashboardTable from "@components/admin/DashboardTable"
 import { useDashboardStatsQuery } from "@/redux/api/dashboardApi"
 import { ErrorResponse } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
+import { useEffect } from "react"
 
 
 
@@ -17,16 +20,24 @@ import { ErrorResponse } from "react-router-dom"
 
 const Dashboard = () => {
 
+    const {token} = useSelector((state: RootState) => state.userSlice);
 
-    const {data, isError, isLoading, isSuccess, error} = useDashboardStatsQuery();
+    const {data, isError, isLoading, isSuccess, error} = useDashboardStatsQuery(token!.access_token);
+
+
+
+    useEffect(() => {
+        if(isError){
+            toast.error((error as ErrorResponse)?.data.message);
+        }
+    }, [isError, error])
+
 
     if(isError ){
-        toast.error((error as ErrorResponse)?.data.message);
         return <>
             Error loading Dashboard ...
         </>
     }
-
 
     if(isLoading || !data){
         return (

@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import TableHOC from "@ui/TableHOC";
 import { useAllOrdersQuery } from "@api/orderApi";
 import { ErrorResponse } from "@/Types/apiTypes";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 
 
@@ -55,7 +57,8 @@ const columns: Column<DataType>[] = [
 
 const Transaction = () => {
 
-    const {data, isError, isLoading, isSuccess, error} = useAllOrdersQuery();
+    const {token} = useSelector((state: RootState) => state.userSlice);
+    const {data, isError, isLoading, isSuccess, error} = useAllOrdersQuery(token!.access_token);
 
 
     const [rows, setRows] = useState<DataType[]>([]);

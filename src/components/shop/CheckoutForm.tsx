@@ -1,6 +1,6 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { FormEvent, useState } from 'react';
-import { CreateOrderRequest } from '../../Types/apiTypes';
+import { TOrderPayload } from '../../Types/apiTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCreateOrderMutation } from '../../redux/api/orderApi';
 import toast from 'react-hot-toast';
@@ -15,7 +15,7 @@ import { RootState } from '../../redux/store';
 const CheckoutForm = () => {
 
 
-    
+    const {token} = useSelector((state: RootState) => state.userSlice);
     const [createOrder] = useCreateOrderMutation();
 
     const stripe = useStripe();
@@ -45,7 +45,7 @@ const CheckoutForm = () => {
         setIsProcessing(true);
 
 
-        const orderPayload: CreateOrderRequest = {
+        const orderPayload: TOrderPayload = {
             shippingInfo,
             user: user?._id as string,
             tax,
@@ -78,7 +78,7 @@ const CheckoutForm = () => {
             
             
             if(paymentIntent?.status === 'succeeded') {
-                const res = await createOrder(orderPayload);
+                const res = await createOrder({data: orderPayload, token: token!.access_token});
                 if ('error' in res) throw new Error((res.error as Error).message);
                 
                 if (res.data.status === "success") {

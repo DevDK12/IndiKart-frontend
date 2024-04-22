@@ -6,6 +6,8 @@ import { ErrorResponse, useNavigate } from "react-router-dom";
 
 import TableHOC from "@ui/TableHOC";
 import { useAllUsersQuery, useDeleteUserMutation } from "@api/userApi";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 
 interface DataType {
@@ -55,10 +57,12 @@ const Customers = () => {
 
 
     const navigate = useNavigate();
+    const {token} = useSelector((state: RootState) => state.userSlice)
 
+    
     const [deleteUser] = useDeleteUserMutation();
 
-    const { data, isLoading, error, isError, isSuccess } = useAllUsersQuery();
+    const { data, isLoading, error, isError, isSuccess } = useAllUsersQuery(token!.access_token);
 
 
     const [rows, setRows] = useState<DataType[]>([]);
@@ -66,7 +70,7 @@ const Customers = () => {
     const deleteUserHandler = useCallback(async (userId: string) => {
 
         try {
-            const res = await deleteUser(userId);
+            const res = await deleteUser({id: userId, token: token!.access_token});
 
             if ('error' in res) {
                 throw new Error((res.error as ErrorResponse).data.message);
@@ -80,7 +84,7 @@ const Customers = () => {
         catch (err) {
             toast.error((err as Error).message);
         }
-    }, [deleteUser, navigate])
+    }, [deleteUser, navigate, token])
 
 
 

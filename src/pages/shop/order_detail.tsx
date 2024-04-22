@@ -3,6 +3,8 @@ import { TOrder } from "@/Types/order-types";
 import { server } from "@/redux/api/productApi";
 import ProductCard from "@/components/admin/ProductCart";
 import { useOrderDetailQuery } from "@/redux/api/orderApi";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 
 
@@ -43,11 +45,15 @@ const defaultOrder : TOrder = {
 
 const OrderDetail = () => {
 
+    const {token} = useSelector((state: RootState) => state.userSlice);
     const { orderId } = useParams<{orderId: string}>();
 
 
 
-    const {data, isLoading: orderIsLoading, isSuccess: orderIsSuccess, isError} = useOrderDetailQuery(orderId!);
+    const {data, isLoading: orderIsLoading, isSuccess: orderIsSuccess, isError} = useOrderDetailQuery({
+        orderId: orderId!,
+        token: token!.access_token,
+    });
 
 
     const {

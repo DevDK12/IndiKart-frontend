@@ -1,20 +1,33 @@
 import { useBarStatsQuery } from "@/redux/api/dashboardApi";
+import { RootState } from "@/redux/store";
 import { ErrorResponse } from "@/Types/apiTypes";
 import { lastMonths } from "@/utils/functions";
 import BarChart from "@ui/Charts/BarChart";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 
 
 const Barcharts = () => {
 
+    const {token} = useSelector((state: RootState) => state.userSlice);
+
     const [last6months, last12months] = lastMonths();
 
 
-    const {data, isError, isLoading, isSuccess, error} = useBarStatsQuery();
+    const {data, isError, isLoading, isSuccess, error} = useBarStatsQuery(token!.access_token);
+
+
+    useEffect(() => {
+        if(isError){
+            toast.error((error as ErrorResponse)?.data.message);
+        }
+    }, [isError, error]);
+
+
 
     if(isError ){
-        toast.error((error as ErrorResponse)?.data.message);
         return <>
             Error loading Dashboard ...
         </>

@@ -9,20 +9,48 @@ export const dashboardApi = createApi({
     reducerPath: 'dashboardApi',
     baseQuery: fetchBaseQuery({baseUrl: `${server}/api/v1/dashboard`}),
     endpoints: (builder) => ({
-        dashboardStats: builder.query<StatsResponse, void>({
-            query: () => 'stats',
+        dashboardStats: builder.query<StatsResponse, string>({
+            query: (token) => {
+                return {
+                    url: 'stats',
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                }
+            },
             keepUnusedDataFor: 0,
         }),
-        pieStats: builder.query<PieResponse, void>({
-            query: () => 'pie',
+        pieStats: builder.query<PieResponse, string>({
+            query: (token) => {
+                return {
+                    url: 'pie',
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                }
+            },
             keepUnusedDataFor: 0,
         }),
-        lineStats: builder.query<LineResponse, void>({
-            query: () => 'line',
+        lineStats: builder.query<LineResponse, string>({
+            query: (token) => {
+                return {
+                    url: 'line',
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                }
+            },
             keepUnusedDataFor: 0,
         }),
-        barStats: builder.query<BarResponse, void>({
-            query: () => 'bar',
+        barStats: builder.query<BarResponse, string>({
+            query: (token) => {
+                return {
+                    url: 'bar',
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                }
+            },
             keepUnusedDataFor: 0,
         })
     })

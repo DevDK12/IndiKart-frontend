@@ -52,12 +52,15 @@ const server = import.meta.env.VITE_SERVER;
 
 const Products = () => {
 
-    const { user } = useSelector((state: RootState) => state.userSlice);
+    const { user, token } = useSelector((state: RootState) => state.userSlice);
 
     const [rows, setRows] = useState<DataType[]>([]);
 
 
-    const { data: productsData, isError, isLoading: productsLoading, isSuccess, error } = useUserProductsQuery(user?._id as string);
+    const { data: productsData, isError, isLoading: productsLoading, isSuccess, error } = useUserProductsQuery({
+        token: token!.access_token,
+        userId:user?._id as string
+    });
 
 
     useEffect(() => {

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa";
 import { getAuth, signOut } from "firebase/auth";
-import { logoutUser } from "@/redux/reducer/user-slice";
+import { deleteUser } from "@/redux/reducer/user-slice";
 import toast from "react-hot-toast";
 import { RootState } from "@/redux/store";
 
@@ -35,9 +35,10 @@ const AdminHeader = () => {
         const auth = getAuth();
         signOut(auth)
             .then(() => {
-                dispatch(logoutUser());
+                dispatch(deleteUser());
                 navigate('/');
                 toast.success('Logged out');
+                localStorage.removeItem('user');
             })
             .catch((err) => {
                 // An error happened.

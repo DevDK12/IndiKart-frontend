@@ -5,6 +5,8 @@ import { TOrder } from "@/Types/order-types";
 import { server } from "@/redux/api/productApi";
 import ProductCard from "@/components/admin/ProductCart";
 import { useDeleteOrderMutation, useOrderDetailQuery, useProcessOrderMutation } from "@/redux/api/orderApi";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 
 
@@ -45,6 +47,7 @@ const defaultOrder : TOrder = {
 
 const ManageTransaction = () => {
 
+    const {token} = useSelector((state: RootState) => state.userSlice);
     const { orderId } = useParams<{orderId: string}>();
 
     const navigate = useNavigate();
@@ -52,7 +55,10 @@ const ManageTransaction = () => {
     const [processOrder, {isLoading: processLoading}] = useProcessOrderMutation();
     const [deleteOrder, {isLoading: deleteLoading}] = useDeleteOrderMutation();
 
-    const {data, isLoading: orderIsLoading, isSuccess: orderIsSuccess, isError} = useOrderDetailQuery(orderId!);
+    const {data, isLoading: orderIsLoading, isSuccess: orderIsSuccess, isError} = useOrderDetailQuery({
+        orderId: orderId!,
+        token: token!.access_token,
+    });
 
 
     const {
@@ -83,7 +89,10 @@ const ManageTransaction = () => {
         //_ Use Optimistic Updates here to update the status of the order
         //* Implement later
         try{
-            const res = await processOrder(orderId!);
+            const res = await processOrder({
+                orderId: orderId!,
+                token: token!.access_token,
+            });
 
             if('error' in res) throw new Error((res.error as Error).message);
 
@@ -102,7 +111,10 @@ const ManageTransaction = () => {
         //_ Use Optimistic Updates here to update the status of the order
         //* Implement later
         try{
-            const res = await deleteOrder(orderId!);
+            const res = await deleteOrder({
+                orderId: orderId!,
+                token: token!.access_token,
+            });
 
             if('error' in res) throw new Error((res.error as ErrorResponse).data.message);
 

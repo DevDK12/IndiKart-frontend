@@ -14,7 +14,7 @@ import { ErrorResponse } from "@/Types/apiTypes";
 
 const NewProduct = () => {
 
-    const { user } = useSelector((state: RootState) => state.userSlice);
+    const { user, token } = useSelector((state: RootState) => state.userSlice);
 
     const navigate = useNavigate();
 
@@ -65,7 +65,10 @@ const NewProduct = () => {
         if (photo) formData.append("photo", photo);
 
         try {
-            const res = await createProduct(formData);
+            const res = await createProduct({
+                formData,
+                token: token!.access_token,
+        });
 
 
             if ('error' in res) {

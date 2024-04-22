@@ -4,6 +4,9 @@ import DoughnutChart from "@ui/Charts/DoughnutChart";
 import PieChart from "@ui/Charts/PieChart";
 import { usePieStatsQuery } from "@/redux/api/dashboardApi";
 import { ErrorResponse } from "@/Types/apiTypes";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 
 
@@ -12,10 +15,20 @@ import { ErrorResponse } from "@/Types/apiTypes";
 
 const PieCharts = () => {
 
-    const {data, isError, isLoading, isSuccess, error} = usePieStatsQuery();
+    const {token} = useSelector((state: RootState) => state.userSlice);
+
+    const {data, isError, isLoading, isSuccess, error} = usePieStatsQuery(token!.access_token);
+
+
+    useEffect(() => {
+        if(isError){
+            toast.error((error as ErrorResponse)?.data.message);
+        }
+    }, [isError, error])
+
+
 
     if(isError ){
-        toast.error((error as ErrorResponse)?.data.message);
         return <>
             Error loading Dashboard ...
         </>

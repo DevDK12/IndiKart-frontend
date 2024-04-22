@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CategoriesResponse, MesssageResponse, ProductsRequest, ProductsResponse, SearchProductsRequest, SearchProductsResponse, SingleProductRequest, UpdateProductRequest } from "../../Types/apiTypes";
+import { CategoriesResponse, createProductRequest, MesssageResponse, ProductDetailRequest, ProductsRequest, ProductsResponse, SearchProductsRequest, SearchProductsResponse, SingleProductRequest, UpdateProductRequest, UserProductRequest } from "../../Types/apiTypes";
 
 
 export const server = import.meta.env.VITE_SERVER;
@@ -14,8 +14,17 @@ export const productApi = createApi({
             providesTags: ['products'],
         }),
         
-        userProducts: builder.query<ProductsResponse, string>({
-            query: (userId) => `admin-products/${userId}`,
+        userProducts: builder.query<ProductsResponse, UserProductRequest>({
+            query: ({userId, token}) => {
+                return {
+                    url: `admin-products/${userId}`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `${token}`
+                    },
+                    method: 'GET'
+                }
+            },
             providesTags: ['products'],
         }),
         
@@ -36,40 +45,60 @@ export const productApi = createApi({
             providesTags: ['products'],
         }),
 
-        createProduct: builder.mutation<MesssageResponse, FormData>({
-            query: (formData) => {
+        createProduct: builder.mutation<MesssageResponse, createProductRequest>({
+            query: ({formData, token}) => {
                 return {
                     url: 'new',
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `${token}`
+                    }
                 }
             },
             invalidatesTags: ['products'],
         }),
 
-        singleProduct: builder.query<SingleProductRequest, string>({
-            query: (productId) => productId,
+        singleProduct: builder.query<SingleProductRequest, ProductDetailRequest>({
+            query: ({productId, token}) => {
+                return {
+                    url: productId,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `${token}`
+                    },
+                    method: 'GET'
+                }
+            },
             providesTags: ['products'],
         }),
 
         updateProduct: builder.mutation<MesssageResponse, UpdateProductRequest>({
             //_ Also include userId to verify authority to update
-            query: ({formData, productId}) => {
+            query: ({formData, productId, token}) => {
                 return {
                     url: productId,
                     method: 'PUT',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `${token}`
+                    }
                 }
             },
             invalidatesTags: ['products', 'product'],
         }),
 
-        deleteProduct: builder.mutation<MesssageResponse, string>({
-            //_ Also include userId to verify authority to delete
-            query: (productId) => {
+        deleteProduct: builder.mutation<MesssageResponse, ProductDetailRequest>({
+            query: ({productId, token}) => {
                 return {
                     url: productId,
                     method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `${token}`
+                    }
                 }
             },
             invalidatesTags: ['products'],

@@ -6,6 +6,8 @@ import { ErrorResponse, Navigate, useNavigate, useParams } from "react-router-do
 import toast from "react-hot-toast";
 
 import Input from "@ui/Input";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 
 
@@ -19,11 +21,16 @@ const ManageProduct = () => {
     const navigate = useNavigate();
     const {productId} = useParams<{productId: string}>();
 
+    const {token} = useSelector((state: RootState) => state.userSlice);
+
 
     const [updateProduct, {isLoading: productUpdating }] = useUpdateProductMutation();
     const [deleteProduct,  {isLoading: productDeleting }] = useDeleteProductMutation();
 
-    const { data, isSuccess, isError, isLoading} = useSingleProductQuery(productId!);
+    const { data, isSuccess, isError, isLoading} = useSingleProductQuery({
+        productId: productId!,
+        token: token!.access_token
+    });
 
     const {price, stock, name, photo} = data?.data?.product || {
         price: 0,
@@ -81,7 +88,7 @@ const ManageProduct = () => {
 
     const deleteProductHandler = async () => {
         try{
-            const res = await deleteProduct(productId!);
+            const res = await deleteProduct({productId: productId!, token: token!.access_token});
             if('error' in res){
                 throw new Error((res.error as ErrorResponse).data.message);
             }
@@ -117,7 +124,7 @@ const ManageProduct = () => {
         }
 
         try{
-            const res = await updateProduct({productId: productId!, formData});
+            const res = await updateProduct({productId: productId!, formData, token: token!.access_token});
 
             if('error' in res){
                 throw new Error((res.error as ErrorResponse).data.message);

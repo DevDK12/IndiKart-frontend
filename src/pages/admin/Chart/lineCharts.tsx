@@ -4,17 +4,28 @@ import { useLineStatsQuery } from "@/redux/api/dashboardApi";
 import { ErrorResponse } from "@/Types/apiTypes";
 import LineChart from "@ui/Charts/LineChart";
 import { lastMonths } from "@/utils/functions";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 
 
 const LineCharts = () => {
 
+    const {token} = useSelector((state: RootState) => state.userSlice);
+
+
     const last12months = lastMonths()[1];
 
     
-    const {data, isError, isLoading, isSuccess, error} = useLineStatsQuery();
+    const {data, isError, isLoading, isSuccess, error} = useLineStatsQuery(token!.access_token);
 
 
+    useEffect(() => {
+        if(isError){
+            toast.error((error as ErrorResponse)?.data.message);
+        }
+    }, [isError, error])
     if(isLoading ){
         return (
             <>
@@ -24,7 +35,6 @@ const LineCharts = () => {
     }
 
     if(isError ){
-        toast.error((error as ErrorResponse)?.data.message);
         return <>
             Error loading Dashboard ...
         </>
